@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 1</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.2em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        input[type="text"], input[type="number"] {
+            padding: 10px; font-size: 1.2em; border-radius: 10px; border: none; margin: 5px;
+        }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        .setup-steps {
+            background: rgba(0,0,0,0.25); border-radius: 15px; padding: 20px; margin: 20px 0;
+            text-align: left; font-size: 1.2em; line-height: 1.8;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">24</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 1: Hello, Python!</h2>
+        <div class="emoji">👋 💻 ✨ 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Welcome to Leternal Systems Coding Camp 2026!</p>
+    </div>
+
+    <!-- Slide 2: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Adventure</h2>
+        <ul>
+            <li>What is programming, anyway?</li>
+            <li>Set up YOUR computer for coding</li>
+            <li>Write your very first program</li>
+            <li>Variables: giving data a name</li>
+            <li>Talk to your program with input()</li>
+        </ul>
+        <div class="fun-fact">🏁 By the end of today, you will be a real programmer!</div>
+    </div>
+
+    <!-- Slide 3: What is programming -->
+    <div class="slide">
+        <h2>🤖 What is Programming?</h2>
+        <p style="font-size: 1.4em;">Programming = giving a computer <strong>very exact instructions</strong>.</p>
+        <div class="interactive-area">
+            <p style="font-size: 1.3em;">🍜 Imagine teaching a robot to make indomie:</p>
+            <p>"Boil water" ✅ &nbsp; "Add noodles" ✅ &nbsp; "Make it nice" ❌ (too vague!)</p>
+            <p style="margin-top: 15px;">Computers do EXACTLY what you say — nothing more, nothing less!</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Why Python -->
+    <div class="slide">
+        <h2>🐍 Why Python?</h2>
+        <ul>
+            <li>Reads almost like English — great first language</li>
+            <li>Powers YouTube, Instagram, Spotify & NASA tools</li>
+            <li>Used for games, apps, robots, and AI</li>
+            <li>One of the most in-demand skills in the world</li>
+        </ul>
+        <div class="fun-fact">🎬 Fun fact: Python is named after a comedy show (Monty Python), not the snake!</div>
+    </div>
+
+    <!-- Slide 5: Setup part 1 -->
+    <div class="slide">
+        <h3>🛠️ Setup Step 1: Install Python</h3>
+        <div class="setup-steps">
+            1️⃣ Open the installer your instructor gives you (or python.org → Downloads)<br>
+            2️⃣ ⚠️ VERY IMPORTANT: tick the box <strong>"Add Python to PATH"</strong><br>
+            3️⃣ Click <strong>Install Now</strong> and wait for the green success screen<br>
+            4️⃣ Raise your hand ✋ when you see "Setup was successful"
+        </div>
+        <div class="fun-fact">🚨 If you forget "Add to PATH", call an instructor — it's an easy fix!</div>
+    </div>
+
+    <!-- Slide 6: Setup part 2 -->
+    <div class="slide">
+        <h3>🛠️ Setup Step 2: Install VS Code</h3>
+        <div class="setup-steps">
+            1️⃣ Run the VS Code installer (or code.visualstudio.com)<br>
+            2️⃣ Accept the agreement, keep clicking <strong>Next</strong>, then <strong>Install</strong><br>
+            3️⃣ Open VS Code → click the Extensions icon 🧩 on the left<br>
+            4️⃣ Search for <strong>"Python"</strong> (by Microsoft) → click <strong>Install</strong>
+        </div>
+        <p style="font-size:1.2em; margin-top:10px;">VS Code is your coding workshop — where we'll write everything this camp! 🧰</p>
+    </div>
+
+    <!-- Slide 7: Setup part 3 -->
+    <div class="slide">
+        <h3>🛠️ Setup Step 3: Your Camp Folder</h3>
+        <div class="setup-steps">
+            1️⃣ On your Desktop, create a folder called <strong>python_camp</strong><br>
+            2️⃣ In VS Code: File → Open Folder → choose <strong>python_camp</strong><br>
+            3️⃣ Click the "New File" icon 📄 and name it <strong>day1.py</strong><br>
+            4️⃣ The <strong>.py</strong> ending tells the computer: "this is Python!"
+        </div>
+        <div class="activity-box"><strong>✅ Checkpoint:</strong> Everyone should see an empty day1.py open in VS Code!</div>
+    </div>
+
+    <!-- Slide 8: First program -->
+    <div class="slide">
+        <h3>🎉 Your First Program!</h3>
+        <div class="code-block">print("Hello, world!")</div>
+        <p style="font-size:1.2em;">Press the ▶️ Run button (top right) and look at the terminal below…</p>
+        <div class="output">Hello, world!</div>
+        <div class="fun-fact">🌍 "Hello, world!" is the traditional first program of every coder on Earth. You just joined the club!</div>
+    </div>
+
+    <!-- Slide 9: print practice -->
+    <div class="slide">
+        <h3>📣 print() = Make the Computer Speak</h3>
+        <div class="code-block">print("My name is Amina")
+print("I am learning Python!")
+print("🔥🔥🔥")</div>
+        <div class="output">My name is Amina<br>I am learning Python!<br>🔥🔥🔥</div>
+        <div class="activity-box"><strong>🎯 Try This:</strong> Print your name, your school, and your favorite food — one line each!</div>
+    </div>
+
+    <!-- Slide 10: Comments -->
+    <div class="slide">
+        <h3>💬 Comments: Notes for Humans</h3>
+        <div class="code-block"># This is a comment - the computer ignores it!
+print("Computers only run the code")  # this part runs</div>
+        <div class="output">Computers only run the code</div>
+        <div class="fun-fact">📝 Comments start with # — use them to leave notes to your future self!</div>
+    </div>
+
+    <!-- Slide 11: Variables intro -->
+    <div class="slide">
+        <h2>📦 Variables: Boxes with Labels</h2>
+        <p style="font-size: 1.4em;">A variable is a labeled box where we store information.</p>
+        <div class="code-block">name = "Tunde"
+age = 12
+
+print(name)
+print(age)</div>
+        <div class="output">Tunde<br>12</div>
+    </div>
+
+    <!-- Slide 12: Variables change -->
+    <div class="slide">
+        <h3>🔄 Variables Can Change!</h3>
+        <div class="code-block">score = 0
+print(score)
+
+score = score + 10   # scored a goal! ⚽
+print(score)</div>
+        <div class="output">0<br>10</div>
+        <div class="activity-box"><strong>🎯 Try This:</strong> Make a variable called <strong>goals</strong>, start it at 0, then add 3 goals for the Super Eagles!</div>
+    </div>
+
+    <!-- Slide 13: Data types -->
+    <div class="slide">
+        <h3>🏷️ Data Types: Kinds of Information</h3>
+        <div class="code-block">name = "Zainab"        # str  (text in quotes)
+age = 13               # int  (whole number)
+height = 1.5           # float (decimal number)
+likes_python = True    # bool (True or False)</div>
+        <div class="fun-fact">🧠 Text needs "quotes". Numbers don't. True/False start with a CAPITAL letter!</div>
+    </div>
+
+    <!-- Slide 14: Type quiz interactive -->
+    <div class="slide">
+        <h3>🎮 Quiz: What Type Is It?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.4em;" id="type-question">"jollof rice"</p>
+            <button onclick="answerType('str')">str 📝</button>
+            <button onclick="answerType('int')">int 🔢</button>
+            <button onclick="answerType('float')">float 🔣</button>
+            <button onclick="answerType('bool')">bool ✅</button>
+            <div id="type-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Math -->
+    <div class="slide">
+        <h3>➕ Python is a Super Calculator</h3>
+        <div class="code-block">print(7 + 3)      # add
+print(10 - 4)     # subtract
+print(6 * 5)      # multiply
+print(20 / 4)     # divide
+print(2 ** 3)     # power (2×2×2)</div>
+        <div class="output">10<br>6<br>30<br>5.0<br>8</div>
+        <div class="activity-box"><strong>🎯 Try This:</strong> If suya costs ₦500 a stick, print the cost of 7 sticks!</div>
+    </div>
+
+    <!-- Slide 16: input -->
+    <div class="slide">
+        <h2>🎤 input(): Talk to Your Program</h2>
+        <div class="code-block">name = input("What is your name? ")
+print("Nice to meet you, " + name + "!")</div>
+        <div class="output">What is your name? <span style="color:#FFD700">Chidi</span><br>Nice to meet you, Chidi!</div>
+        <div class="fun-fact">⌨️ input() pauses and waits for the user to type something, then hands it to you!</div>
+    </div>
+
+    <!-- Slide 17: f-strings -->
+    <div class="slide">
+        <h3>✨ f-strings: The Easy Way to Mix Text</h3>
+        <div class="code-block">name = "Ada"
+age = 11
+
+print(f"Hi {name}! Next year you'll be {age + 1}!")</div>
+        <div class="output">Hi Ada! Next year you'll be 12!</div>
+        <div class="fun-fact">🪄 Put an <strong>f</strong> before the quotes, then use {curly braces} to drop variables right in!</div>
+    </div>
+
+    <!-- Slide 18: Name badge interactive -->
+    <div class="slide">
+        <h3>🎮 Activity: Name Badge Generator</h3>
+        <div class="interactive-area">
+            <p>This is what YOUR program will do — try it first:</p>
+            <input type="text" id="badge-name" placeholder="Your name">
+            <input type="text" id="badge-food" placeholder="Favorite food">
+            <br>
+            <button onclick="makeBadge()">Make My Badge! 🏷️</button>
+            <div id="badge-result" style="margin-top: 20px; font-size: 1.4em; font-weight: bold;"></div>
+        </div>
+        <div class="activity-box"><strong>🎯 Now in Python:</strong> use two input() calls and one f-string print!</div>
+    </div>
+
+    <!-- Slide 19: Numbers from input -->
+    <div class="slide">
+        <h3>🔢 input() Always Gives Text!</h3>
+        <div class="code-block">age = input("How old are you? ")
+age = int(age)    # convert text ➜ number
+
+print(f"In 10 years you'll be {age + 10}!")</div>
+        <div class="output">How old are you? <span style="color:#FFD700">12</span><br>In 10 years you'll be 22!</div>
+        <div class="fun-fact">🔧 int() converts text to a whole number. Without it, "12" + 10 breaks!</div>
+    </div>
+
+    <!-- Slide 20: Mad Libs -->
+    <div class="slide">
+        <h3>🎪 Build: Silly Story Machine (Mad Libs)</h3>
+        <div class="code-block">animal = input("An animal: ")
+food = input("A food: ")
+place = input("A place: ")
+
+print(f"Yesterday, a {animal} ate {food} in {place}! 😂")</div>
+        <div class="output">Yesterday, a goat ate jollof rice in Lagos! 😂</div>
+        <div class="activity-box"><strong>🎯 Your turn:</strong> Add TWO more questions to make the story even sillier!</div>
+    </div>
+
+    <!-- Slide 21: Errors are friends -->
+    <div class="slide">
+        <h3>🐛 Errors Are Your Friends!</h3>
+        <div class="code-block">print("Hello!</div>
+        <div class="output" style="color:#FF6B6B;">SyntaxError: unterminated string literal</div>
+        <ul>
+            <li>Every programmer sees errors every single day</li>
+            <li>Read the LAST line of the error — it's a clue 🕵️</li>
+            <li>Check for missing quotes, brackets, and spelling</li>
+        </ul>
+    </div>
+
+    <!-- Slide 22: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 1 Worksheet</h3>
+            <ul>
+                <li>Greeting Machine</li>
+                <li>Super Calculator</li>
+                <li>About Me Card</li>
+                <li>⭐ Bonus: Age in Dog Years</li>
+            </ul>
+        </div>
+        <p style="font-size:1.2em;">Raise your hand ✋ if you get stuck — errors are part of the fun!</p>
+    </div>
+
+    <!-- Slide 23: Tomorrow preview -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>🤔 Teach Your Programs to THINK!</h3>
+            <ul>
+                <li>if / else — programs that make decisions</li>
+                <li>Loops — repeat things 1000 times without typing 1000 lines</li>
+                <li>Start building a real game 🎮</li>
+            </ul>
+        </div>
+        <div class="emoji">🧠 🔄 🎮 🔥</div>
+    </div>
+
+    <!-- Slide 24: Wrap up -->
+    <div class="slide">
+        <h1>🎉 You Did It!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Setting up Python + VS Code like a pro</li>
+            <li>print(), comments, and variables</li>
+            <li>Data types: str, int, float, bool</li>
+            <li>input() and magical f-strings</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 You wrote your first real programs today. That makes you a programmer! 🐍✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        // Type quiz
+        const typeQuestions = [
+            { q: '"jollof rice"', a: 'str' },
+            { q: '42', a: 'int' },
+            { q: 'True', a: 'bool' },
+            { q: '3.14', a: 'float' },
+            { q: '"2026"', a: 'str' }
+        ];
+        let typeIndex = 0;
+        function answerType(choice) {
+            const result = document.getElementById('type-result');
+            const current = typeQuestions[typeIndex];
+            if (choice === current.a) {
+                result.innerHTML = '✅ Correct! ' + current.q + ' is a ' + current.a;
+                result.style.color = '#98FB98';
+                typeIndex = (typeIndex + 1) % typeQuestions.length;
+                setTimeout(() => {
+                    document.getElementById('type-question').textContent = typeQuestions[typeIndex].q;
+                    result.innerHTML = '';
+                }, 1500);
+            } else {
+                result.innerHTML = '❌ Not quite — look closely! Hint: are there quotes? A decimal point?';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // Name badge
+        function makeBadge() {
+            const name = document.getElementById('badge-name').value.trim();
+            const food = document.getElementById('badge-food').value.trim();
+            const result = document.getElementById('badge-result');
+            if (name && food) {
+                result.innerHTML = `🏷️ HELLO! My name is ${name} and I would code all day for ${food}! 🐍`;
+                result.style.color = '#FFD700';
+            } else {
+                result.innerHTML = '⚠️ Fill in both boxes first!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+    </script>
+</body>
+</html>

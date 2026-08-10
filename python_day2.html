@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 2</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.2em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        input[type="text"], input[type="number"] {
+            padding: 10px; font-size: 1.2em; border-radius: 10px; border: none; margin: 5px;
+        }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">22</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 2: Programs That THINK!</h2>
+        <div class="emoji">🧠 🔄 🎮 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Decisions and loops — the superpowers of every program!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up quiz -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Yesterday?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;" id="warmup-q">What does this print? <span style="font-family:monospace; color:#FFD700;">print(f"{2 + 3} stars")</span></p>
+            <button onclick="warmup('a')" id="wa">2 + 3 stars</button>
+            <button onclick="warmup('b')" id="wb">5 stars</button>
+            <button onclick="warmup('c')" id="wc">Error</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Coding Adventure</h2>
+        <ul>
+            <li>Making decisions with if / elif / else</li>
+            <li>Combining conditions with and, or, not</li>
+            <li>Repeating tasks with for and while loops</li>
+            <li>Building our first real game! 🎮</li>
+        </ul>
+        <div class="fun-fact">🎮 Every game you've ever played is just decisions + loops!</div>
+    </div>
+
+    <!-- Slide 4: Decisions intro -->
+    <div class="slide">
+        <h2>🤔 Making Decisions: If Statements</h2>
+        <p style="font-size: 1.4em;">Just like in real life, programs need to make choices!</p>
+        <div class="interactive-area">
+            <p style="font-size: 1.3em;">🌧️ Rainy season in Lagos... Should I carry an umbrella?</p>
+            <p>IF it's raining → Bring umbrella ☂️</p>
+            <p>ELSE → Leave it at home 🏠</p>
+        </div>
+    </div>
+
+    <!-- Slide 5: Comparisons -->
+    <div class="slide">
+        <h3>⚖️ Comparison Operators</h3>
+        <div class="code-block">print(5 > 3)    # greater than    → True
+print(5 < 3)    # less than       → False
+print(5 == 5)   # equal to        → True
+print(5 != 3)   # not equal       → True
+print(5 >= 5)   # greater or equal → True</div>
+        <div class="fun-fact">⚠️ Watch out! <strong>=</strong> puts a value in a box. <strong>==</strong> asks "are these equal?"</div>
+    </div>
+
+    <!-- Slide 6: Basic if -->
+    <div class="slide">
+        <h3>Your First If Statement</h3>
+        <div class="code-block">weather = "rainy"
+
+if weather == "rainy":
+    print("Bring an umbrella! ☂️")
+else:
+    print("Enjoy the sunshine! ☀️")</div>
+        <div class="output">Bring an umbrella! ☂️</div>
+        <div class="fun-fact">📏 The indented (pushed-in) lines belong to the if. Python is strict about this!</div>
+    </div>
+
+    <!-- Slide 7: elif -->
+    <div class="slide">
+        <h3>Multiple Choices with elif</h3>
+        <div class="code-block">temperature = 28
+
+if temperature > 35:
+    print("Too hot! 🥵 Stay in the shade!")
+elif temperature > 22:
+    print("Perfect weather! 😊")
+else:
+    print("Cool day! 🧥 Maybe a light jacket!")</div>
+        <div class="output">Perfect weather! 😊</div>
+    </div>
+
+    <!-- Slide 8: Logical operators -->
+    <div class="slide">
+        <h3>🧠 Logical Operators: AND, OR, NOT</h3>
+        <div class="code-block">age = 12
+has_ticket = True
+
+if age >= 10 and has_ticket:
+    print("Welcome to the movie! 🎬")
+else:
+    print("Sorry, not today! 😔")</div>
+        <div class="activity-box"><strong>🎯 Predict:</strong> What happens if age = 8? What if has_ticket = False? What if we change <strong>and</strong> to <strong>or</strong>?</div>
+    </div>
+
+    <!-- Slide 9: Interactive movie checker -->
+    <div class="slide">
+        <h3>🎮 Activity: Movie Ticket Checker</h3>
+        <div class="interactive-area">
+            <p>Enter your age:</p>
+            <input type="number" id="age-input" placeholder="Your age">
+            <br>
+            <button onclick="checkAge()">Can I Watch? 🎬</button>
+            <div id="age-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+        <div class="activity-box"><strong>🎯 Now in Python:</strong> Write this with input(), int(), and if/elif/else!</div>
+    </div>
+
+    <!-- Slide 10: Loops intro -->
+    <div class="slide">
+        <h2>🔄 Loops: The Repeat Button</h2>
+        <p style="font-size: 1.4em;">Tired of typing the same thing over and over?</p>
+        <div class="interactive-area">
+            <p>Instead of writing:</p>
+            <div class="code-block">print("I love Python!")
+print("I love Python!")
+print("I love Python!")</div>
+            <p>We can use a loop! 🎪</p>
+        </div>
+    </div>
+
+    <!-- Slide 11: For loops -->
+    <div class="slide">
+        <h3>🎪 For Loops: Count and Repeat</h3>
+        <div class="code-block">for i in range(3):
+    print("I love Python! 🐍")</div>
+        <div class="output">I love Python! 🐍<br>I love Python! 🐍<br>I love Python! 🐍</div>
+        <div class="fun-fact">🎯 range(3) means "do this 3 times". Change 3 to 100 — one tiny edit, 100 prints!</div>
+    </div>
+
+    <!-- Slide 12: Using i -->
+    <div class="slide">
+        <h3>🔢 The Loop Counter</h3>
+        <div class="code-block">for i in range(5):
+    print(f"Lap number {i}")</div>
+        <div class="output">Lap number 0<br>Lap number 1<br>Lap number 2<br>Lap number 3<br>Lap number 4</div>
+        <div class="fun-fact">😲 Computers start counting from 0! range(5) gives 0, 1, 2, 3, 4.</div>
+    </div>
+
+    <!-- Slide 13: Loops + if -->
+    <div class="slide">
+        <h3>🤝 Loops + Ifs = Power Combo</h3>
+        <div class="code-block">for i in range(1, 6):
+    if i == 3:
+        print(f"{i} 🎉 My lucky number!")
+    else:
+        print(i)</div>
+        <div class="output">1<br>2<br>3 🎉 My lucky number!<br>4<br>5</div>
+    </div>
+
+    <!-- Slide 14: While loops -->
+    <div class="slide">
+        <h3>⏰ While Loops: Keep Going Until...</h3>
+        <div class="code-block">countdown = 5
+
+while countdown > 0:
+    print(f"{countdown}... 🚀")
+    countdown = countdown - 1
+
+print("Blast off! 🎆")</div>
+        <div class="output">5... 🚀<br>4... 🚀<br>3... 🚀<br>2... 🚀<br>1... 🚀<br>Blast off! 🎆</div>
+    </div>
+
+    <!-- Slide 15: Infinite loop warning -->
+    <div class="slide">
+        <h3>♾️ Danger: The Infinite Loop!</h3>
+        <div class="code-block">countdown = 5
+
+while countdown > 0:
+    print(countdown)
+    # oops... we forgot to change countdown!</div>
+        <div class="output">5<br>5<br>5<br>5... (forever!!! 😱)</div>
+        <div class="fun-fact">🆘 If your program runs forever, click in the terminal and press <strong>Ctrl + C</strong> to stop it!</div>
+    </div>
+
+    <!-- Slide 16: break -->
+    <div class="slide">
+        <h3>🛑 break: The Emergency Exit</h3>
+        <div class="code-block">while True:
+    answer = input("Say the magic word: ")
+    if answer == "please":
+        print("You may pass! 🏰")
+        break
+    print("Nope, try again! 😄")</div>
+        <div class="output">Say the magic word? <span style="color:#FFD700">abeg</span><br>Nope, try again! 😄<br>Say the magic word? <span style="color:#FFD700">please</span><br>You may pass! 🏰</div>
+    </div>
+
+    <!-- Slide 17: Star pattern activity -->
+    <div class="slide">
+        <h3>🎮 Loop Challenge: Pattern Maker</h3>
+        <div class="interactive-area">
+            <p>How many stars do you want?</p>
+            <input type="number" id="star-input" placeholder="Number of stars">
+            <br>
+            <button onclick="makeStars()">Make Stars!</button>
+            <div id="star-result" style="margin-top: 20px; font-size: 1.5em; font-family: monospace;"></div>
+        </div>
+        <div class="activity-box"><strong>🎯 In Python:</strong> print("⭐" * n) does this in ONE line. Then try a triangle with a loop!</div>
+    </div>
+
+    <!-- Slide 18: Guess the output game -->
+    <div class="slide">
+        <h3>🎮 Game: Guess the Output!</h3>
+        <div class="interactive-area">
+            <div class="code-block" id="guess-code">total = 0
+for i in range(4):
+    total = total + i
+print(total)</div>
+            <button onclick="guessAnswer('4')">4</button>
+            <button onclick="guessAnswer('6')">6</button>
+            <button onclick="guessAnswer('10')">10</button>
+            <div id="guess-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Guess my number build -->
+    <div class="slide">
+        <h2>🎮 Big Build: Guess My Number!</h2>
+        <div class="code-block">secret = 7
+guess = 0
+
+while guess != secret:
+    guess = int(input("Guess my number (1-10): "))
+    if guess < secret:
+        print("Too low! ⬇️")
+    elif guess > secret:
+        print("Too high! ⬆️")
+
+print("🎉 You got it! You're a mind reader!")</div>
+        <div class="fun-fact">🔮 On Day 6 we'll make the computer pick a RANDOM secret number!</div>
+    </div>
+
+    <!-- Slide 20: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 2 Worksheet</h3>
+            <ul>
+                <li>Secret Password Gate</li>
+                <li>Grade Calculator</li>
+                <li>Times Table Machine</li>
+                <li>⭐ Bonus: Star Triangle & FizzBuzz Jr.</li>
+            </ul>
+        </div>
+        <p style="font-size:1.2em;">Pair up! One types, one spots bugs 🐛 — swap halfway!</p>
+    </div>
+
+    <!-- Slide 21: Tomorrow preview -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>📋 Lists & Dictionaries!</h3>
+            <ul>
+                <li>Store 100 things in ONE variable</li>
+                <li>Build a music playlist manager 🎵</li>
+                <li>Create profiles like a real app 📱</li>
+            </ul>
+        </div>
+        <div class="emoji">📋 📖 🎵 🔥</div>
+    </div>
+
+    <!-- Slide 22: Wrap up -->
+    <div class="slide">
+        <h1>🎉 Amazing Job Today!</h1>
+        <h2>You've Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Making decisions with if / elif / else</li>
+            <li>Combining conditions with and, or, not</li>
+            <li>Repeating with for and while loops</li>
+            <li>break, and escaping infinite loops!</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 You built a real game today. Level up! 🐍✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow for more coding adventures! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! The f-string calculates 2 + 3 first. Great memory!';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Hmm — remember, {curly braces} in an f-string RUN the code inside!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        function checkAge() {
+            const age = parseInt(document.getElementById('age-input').value);
+            const result = document.getElementById('age-result');
+            if (isNaN(age)) {
+                result.innerHTML = '⚠️ Enter a number first!';
+                result.style.color = '#FF6B6B';
+            } else if (age >= 13) {
+                result.innerHTML = '🎬 Welcome in! Enjoy the movie!';
+                result.style.color = '#98FB98';
+            } else if (age >= 10) {
+                result.innerHTML = '🧑‍🤝‍🧑 You can watch with an adult!';
+                result.style.color = '#FFD700';
+            } else {
+                result.innerHTML = '🍿 Cartoon hall is that way!';
+                result.style.color = '#FFB6C1';
+            }
+        }
+
+        function makeStars() {
+            const num = parseInt(document.getElementById('star-input').value);
+            const result = document.getElementById('star-result');
+            let stars = '';
+            for (let i = 0; i < num && i < 20; i++) stars += '⭐';
+            result.innerHTML = stars || 'Enter a number between 1-20!';
+        }
+
+        function guessAnswer(choice) {
+            const result = document.getElementById('guess-result');
+            if (choice === '6') {
+                result.innerHTML = '✅ Correct! 0 + 1 + 2 + 3 = 6. Remember: range(4) is 0,1,2,3!';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Trace it slowly: what values does i take? Start from 0!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+    </script>
+</body>
+</html>

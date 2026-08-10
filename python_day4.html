@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.15em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        .setup-steps {
+            background: rgba(0,0,0,0.25); border-radius: 15px; padding: 20px; margin: 20px 0;
+            text-align: left; font-size: 1.2em; line-height: 1.8;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        canvas { background: #1a1a2e; border-radius: 10px; border: 3px solid #4A90E2; }
+        .loop-step {
+            display: inline-block; background: #2d3748; color: #98FB98; padding: 14px 20px;
+            border-radius: 10px; margin: 8px; font-weight: bold; border: 2px solid #4A90E2;
+        }
+        .loop-arrow { font-size: 1.5em; color: #FFD700; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">23</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 4: Meet Pygame! 🏛️</h2>
+        <div class="emoji">🏛️ 🕹️ 👾 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Today, we start building Museum Invaders for real!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Yesterday?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">What does <span style="font-family:monospace;color:#FFD700;">return</span> do that <span style="font-family:monospace;color:#FFD700;">print()</span> doesn't?</p>
+            <button onclick="warmup('a')">Shows text on screen</button>
+            <button onclick="warmup('b')">Hands a value back to use later</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: The big reveal -->
+    <div class="slide">
+        <h1>🎮 Let's Build a REAL Game!</h1>
+        <p style="font-size:1.5em; margin-top:20px;">Starting today, everything we build is one project:</p>
+        <h2 style="margin-top:20px;">🏛️ Museum Invaders 👾</h2>
+        <p style="font-size:1.3em; margin-top:15px;">You are the Night Curator, defending the gallery from escaped exhibits!</p>
+    </div>
+
+    <!-- Slide 4: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Adventure</h2>
+        <ul>
+            <li>Installing pygame</li>
+            <li>What is a "game loop"?</li>
+            <li>Opening a window and drawing a shape</li>
+            <li>Reading the keyboard</li>
+            <li>Moving our Night Curator left & right</li>
+        </ul>
+    </div>
+
+    <!-- Slide 5: Install pygame -->
+    <div class="slide">
+        <h3>🛠️ Installing Pygame</h3>
+        <div class="setup-steps">
+            1️⃣ Open a terminal in VS Code (Terminal → New Terminal)<br>
+            2️⃣ Type: <strong>pip install pygame</strong> and press Enter<br>
+            3️⃣ Wait for "Successfully installed pygame"<br>
+            4️⃣ Raise your hand ✋ if you see any red error text
+        </div>
+        <div class="fun-fact">📦 pip is Python's "app store" — it downloads extra tools other people built for us to use!</div>
+    </div>
+
+    <!-- Slide 6: What is pygame -->
+    <div class="slide">
+        <h2>🏛️ What Is Pygame?</h2>
+        <p style="font-size:1.4em;">A toolkit that lets Python open windows, draw shapes, and react to the keyboard.</p>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">Without pygame, Python just prints text.</p>
+            <p style="font-size:1.3em;">With pygame, Python can make an actual GAME! 🕹️</p>
+        </div>
+    </div>
+
+    <!-- Slide 7: Game loop concept -->
+    <div class="slide">
+        <h3>🔁 The Game Loop</h3>
+        <p style="font-size:1.3em;">Every video game ever made repeats these 3 steps, forever, dozens of times per second:</p>
+        <div style="margin: 25px 0;">
+            <span class="loop-step">1. Check Input 🎮</span>
+            <span class="loop-arrow">➜</span>
+            <span class="loop-step">2. Update 🔄</span>
+            <span class="loop-arrow">➜</span>
+            <span class="loop-step">3. Draw 🖌️</span>
+            <span class="loop-arrow">↩️ (repeat!)</span>
+        </div>
+        <div class="fun-fact">🎬 Minecraft, FIFA, Museum Invaders — they ALL run this exact loop, just with fancier graphics!</div>
+    </div>
+
+    <!-- Slide 8: The window -->
+    <div class="slide">
+        <h3>🪟 Opening a Window</h3>
+        <div class="code-block">import pygame
+
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Museum Invaders")</div>
+        <div class="fun-fact">📐 (800, 600) is the width and height in pixels. That's our whole gallery floor!</div>
+    </div>
+
+    <!-- Slide 9: The loop skeleton -->
+    <div class="slide">
+        <h3>🔁 The Loop in Code</h3>
+        <div class="code-block">running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # (update stuff will go here)
+    # (draw stuff will go here)
+
+    pygame.display.flip()   # show the new frame
+
+pygame.quit()</div>
+        <div class="fun-fact">🖼️ pygame.display.flip() is like flipping to a new page in a flipbook — it shows what we just drew!</div>
+    </div>
+
+    <!-- Slide 10: Drawing a rectangle -->
+    <div class="slide">
+        <h3>🎨 Drawing Our Curator</h3>
+        <div class="code-block">screen.fill((10, 10, 30))     # background color
+
+pygame.draw.rect(
+    screen,
+    (255, 215, 0),             # gold color
+    (380, 550, 40, 40)         # x, y, width, height
+)
+
+pygame.display.flip()</div>
+        <div class="fun-fact">🎨 Colors are (Red, Green, Blue) numbers from 0-255. (255, 215, 0) is gold!</div>
+    </div>
+
+    <!-- Slide 11: fill every frame -->
+    <div class="slide">
+        <h3>🖌️ Why We Fill Every Frame</h3>
+        <div class="code-block">while running:
+    ...
+    screen.fill((10, 10, 30))   # erase the old frame!
+    pygame.draw.rect(screen, gold, curator_rect)
+    pygame.display.flip()</div>
+        <div class="fun-fact">🧽 Without screen.fill() every loop, old drawings never get erased — you'd get a smeary trail!</div>
+    </div>
+
+    <!-- Slide 12: Reading keys -->
+    <div class="slide">
+        <h3>⌨️ Reading the Keyboard</h3>
+        <div class="code-block">keys = pygame.key.get_pressed()
+
+if keys[pygame.K_LEFT]:
+    x = x - 5
+
+if keys[pygame.K_RIGHT]:
+    x = x + 5</div>
+        <div class="fun-fact">🕹️ We check this EVERY loop — that's why holding a key keeps moving the curator smoothly!</div>
+    </div>
+
+    <!-- Slide 13: Interactive canvas demo -->
+    <div class="slide">
+        <h3>🎮 Try It: Move the Curator!</h3>
+        <div class="interactive-area">
+            <p>Click the box below, then use ← and → (this is what your pygame window will do!)</p>
+            <canvas id="game-canvas" width="500" height="200" tabindex="0"></canvas>
+            <p style="margin-top:10px; font-size:1.1em;">x position: <span id="pos-x">230</span></p>
+        </div>
+    </div>
+
+    <!-- Slide 14: Full movement code -->
+    <div class="slide">
+        <h3>🏗️ Putting It All Together</h3>
+        <div class="code-block">import pygame
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+x = 380
+
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        x -= 5
+    if keys[pygame.K_RIGHT]:
+        x += 5
+
+    screen.fill((10, 10, 30))
+    pygame.draw.rect(screen, (255, 215, 0), (x, 550, 40, 40))
+    pygame.display.flip()
+
+pygame.quit()</div>
+    </div>
+
+    <!-- Slide 15: Boundaries -->
+    <div class="slide">
+        <h3>🚧 Staying On Screen</h3>
+        <div class="code-block">if keys[pygame.K_LEFT] and x > 0:
+    x -= 5
+if keys[pygame.K_RIGHT] and x < 760:
+    x += 5</div>
+        <div class="fun-fact">🧱 Without this check, the curator could walk right off the edge of the gallery forever!</div>
+    </div>
+
+    <!-- Slide 16: Common errors -->
+    <div class="slide">
+        <h3>🐛 Common Pygame Hiccups</h3>
+        <ul>
+            <li>Window opens then instantly closes → you're missing the while loop</li>
+            <li>Nothing draws → forgot pygame.display.flip()</li>
+            <li>Smeary trails → forgot screen.fill() each loop</li>
+            <li>"pygame not found" → pip install pygame didn't finish</li>
+        </ul>
+        <div class="fun-fact">🕵️ Read error messages bottom-to-top — the last line usually tells you exactly what's wrong!</div>
+    </div>
+
+    <!-- Slide 17: Why this matters -->
+    <div class="slide">
+        <h2>🧩 Why Today Matters</h2>
+        <p style="font-size:1.4em;">Every pygame project — no matter how fancy — is built from these SAME pieces:</p>
+        <ul>
+            <li>A window</li>
+            <li>A loop that never stops (until you quit)</li>
+            <li>Reading input, updating, drawing</li>
+        </ul>
+        <div class="fun-fact">🏗️ Master this skeleton today, and the rest of the week is just adding more stuff INSIDE it!</div>
+    </div>
+
+    <!-- Slide 18: Deliverable -->
+    <div class="slide">
+        <h2>🏆 Today's Deliverable</h2>
+        <div class="activity-box">
+            <h3>Get the Curator Moving!</h3>
+            <p>A pygame window where arrow keys move a gold rectangle left and right, saved as <strong>main.py</strong></p>
+        </div>
+        <div class="fun-fact">🎉 This tiny rectangle is officially the FIRST piece of Museum Invaders. Everything else gets added on top!</div>
+    </div>
+
+    <!-- Slide 19: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 4 Worksheet</h3>
+            <ul>
+                <li>Open a pygame window with a title</li>
+                <li>Draw your curator and move it left/right</li>
+                <li>Keep it inside the screen edges</li>
+                <li>⭐ Bonus: change the curator's color, or add up/down movement too</li>
+            </ul>
+        </div>
+        <p style="font-size:1.2em;">Save often! If pygame ever "freezes," close the window and re-run.</p>
+    </div>
+
+    <!-- Slide 20: Show and tell -->
+    <div class="slide">
+        <h2>🎪 End of Week 1 Showcase!</h2>
+        <p style="font-size:1.5em;">Everyone demo your moving curator on the big screen! 📽️</p>
+        <div class="fun-fact">👏 You went from "Hello, world!" on Monday to a real game window today. That's huge progress!</div>
+    </div>
+
+    <!-- Slide 21: Next week preview -->
+    <div class="slide">
+        <h2>🚀 Next Week</h2>
+        <div class="activity-box">
+            <h3>🧱 Classes, Sprites & Shooting!</h3>
+            <ul>
+                <li>Organize the curator into a real Player class</li>
+                <li>Split code across multiple files</li>
+                <li>Fire torch bolts with the spacebar</li>
+            </ul>
+        </div>
+        <div class="emoji">🧱 🔫 👾 🔥</div>
+    </div>
+
+    <!-- Slide 22: Museum Invaders roadmap -->
+    <div class="slide">
+        <h3>🗺️ The Road to Museum Invaders</h3>
+        <ul style="font-size:1.15em;">
+            <li>✅ Day 3: Lists + Functions</li>
+            <li>✅ Day 4: Window + moving curator</li>
+            <li>Day 5: Player class + shooting</li>
+            <li>Day 6: A whole squad of enemies</li>
+            <li>Day 7: Collisions, win & lose</li>
+            <li>Day 8: Polish + showcase!</li>
+        </ul>
+    </div>
+
+    <!-- Slide 23: Wrap up -->
+    <div class="slide">
+        <h1>🎉 You Made a Game Window!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Installing and importing pygame</li>
+            <li>The game loop: input → update → draw</li>
+            <li>Drawing shapes and reading the keyboard</li>
+            <li>Moving a sprite and keeping it on screen</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Museum Invaders has officially begun. Everything from here builds on THIS code! 🏛️✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you next week! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (document.activeElement && document.activeElement.id === 'game-canvas') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! return hands a value back so we can store or reuse it.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ That\'s what print() does — return is different!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // Mini canvas demo: move a box with arrow keys
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        let boxX = 230;
+        const boxY = 150;
+        const boxSize = 40;
+
+        function drawScene() {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(boxX, boxY, boxSize, boxSize);
+            ctx.fillStyle = '#98FB98';
+            ctx.font = '16px monospace';
+            ctx.fillText('🏛️ gallery floor', 10, 20);
+            document.getElementById('pos-x').textContent = Math.round(boxX);
+        }
+        drawScene();
+
+        canvas.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                boxX = Math.max(0, boxX - 15);
+                drawScene();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight') {
+                boxX = Math.min(canvas.width - boxSize, boxX + 15);
+                drawScene();
+                e.preventDefault();
+            }
+        });
+        canvas.addEventListener('click', function() { canvas.focus(); });
+    </script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 3</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.2em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        input[type="text"] {
+            padding: 10px; font-size: 1.2em; border-radius: 10px; border: none; margin: 5px;
+        }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        .index-box {
+            display: inline-block; background: #2d3748; color: #90CDF4; padding: 10px 16px;
+            border-radius: 8px; margin: 4px; font-family: monospace; font-size: 1.1em; border: 2px solid #4A90E2;
+        }
+        .index-label { font-size: 0.7em; color: #FFD700; display: block; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">23</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 3: Lists & Functions</h2>
+        <div class="emoji">📋 ⚙️ 🎮 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">The two building blocks every real game needs!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Yesterday?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">What does this print? <span style="font-family:monospace;color:#FFD700;">for i in range(3): print("hi")</span></p>
+            <button onclick="warmup('a')">hi (once)</button>
+            <button onclick="warmup('b')">hi hi hi (3 times)</button>
+            <button onclick="warmup('c')">Error</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Adventure</h2>
+        <ul>
+            <li>Lists: storing a BUNCH of things in one box</li>
+            <li>Indexing, adding, and removing items</li>
+            <li>Looping through a list</li>
+            <li>Functions: reusable chunks of code</li>
+            <li>Combine both into one real program!</li>
+        </ul>
+        <div class="fun-fact">🎮 Every game needs to track "a bunch of things" (enemies!) and "repeatable actions" (shoot!). That's exactly today's topic.</div>
+    </div>
+
+    <!-- Slide 4: The problem -->
+    <div class="slide">
+        <h3>😩 The Problem With Separate Variables</h3>
+        <div class="code-block">player1 = "Ada"
+player2 = "Bola"
+player3 = "Chidi"
+player4 = "Dayo"
+# ...what if we have 50 players?? 😱</div>
+        <p style="font-size:1.3em;">There has to be a better way to store LOTS of things!</p>
+    </div>
+
+    <!-- Slide 5: Lists intro -->
+    <div class="slide">
+        <h2>📋 Lists: One Box, Many Items</h2>
+        <div class="code-block">players = ["Ada", "Bola", "Chidi", "Dayo"]
+print(players)</div>
+        <div class="output">['Ada', 'Bola', 'Chidi', 'Dayo']</div>
+        <div class="fun-fact">🎒 A list is like a backpack — one variable holding many things, in order!</div>
+    </div>
+
+    <!-- Slide 6: Indexing -->
+    <div class="slide">
+        <h3>🔢 Indexing: Grabbing One Item</h3>
+        <div class="code-block">players = ["Ada", "Bola", "Chidi", "Dayo"]
+print(players[0])
+print(players[2])</div>
+        <div class="output">Ada<br>Chidi</div>
+        <div style="margin: 15px 0;">
+            <span class="index-box"><span class="index-label">[0]</span>Ada</span>
+            <span class="index-box"><span class="index-label">[1]</span>Bola</span>
+            <span class="index-box"><span class="index-label">[2]</span>Chidi</span>
+            <span class="index-box"><span class="index-label">[3]</span>Dayo</span>
+        </div>
+        <div class="fun-fact">😲 Python counts from 0! The first item is players[0], not players[1].</div>
+    </div>
+
+    <!-- Slide 7: Interactive indexer -->
+    <div class="slide">
+        <h3>🎮 Activity: Index Explorer</h3>
+        <div class="interactive-area">
+            <p>toppings = ["suya", "jollof", "puff puff", "chin chin"]</p>
+            <button onclick="showIndex(0)">toppings[0]</button>
+            <button onclick="showIndex(1)">toppings[1]</button>
+            <button onclick="showIndex(3)">toppings[3]</button>
+            <button onclick="showIndex(-1)">toppings[-1] 👀</button>
+            <div id="index-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+        <div class="fun-fact">🔄 toppings[-1] means "the LAST item" — negative indexes count from the end!</div>
+    </div>
+
+    <!-- Slide 8: len and append -->
+    <div class="slide">
+        <h3>📏 len() and append()</h3>
+        <div class="code-block">toppings = ["suya", "jollof"]
+print(len(toppings))     # how many items?
+
+toppings.append("chin chin")   # add to the end
+print(toppings)</div>
+        <div class="output">2<br>['suya', 'jollof', 'chin chin']</div>
+    </div>
+
+    <!-- Slide 9: remove -->
+    <div class="slide">
+        <h3>🗑️ Removing Items</h3>
+        <div class="code-block">toppings = ["suya", "jollof", "chin chin"]
+toppings.remove("jollof")
+print(toppings)</div>
+        <div class="output">['suya', 'chin chin']</div>
+        <div class="fun-fact">⚠️ remove() deletes the FIRST matching item. If it's not in the list, Python throws an error!</div>
+    </div>
+
+    <!-- Slide 10: Looping through lists -->
+    <div class="slide">
+        <h3>🔄 Looping Through a List</h3>
+        <div class="code-block">players = ["Ada", "Bola", "Chidi"]
+
+for player in players:
+    print(f"Welcome, {player}!")</div>
+        <div class="output">Welcome, Ada!<br>Welcome, Bola!<br>Welcome, Chidi!</div>
+        <div class="fun-fact">🎯 This is the #1 most useful pattern in ALL of programming: "for each thing in my list, do something."</div>
+    </div>
+
+    <!-- Slide 11: Playlist manager -->
+    <div class="slide">
+        <h3>🎵 Build: Playlist Manager</h3>
+        <div class="code-block">playlist = []
+
+song = input("Add a song: ")
+playlist.append(song)
+
+song = input("Add another song: ")
+playlist.append(song)
+
+print("Your playlist:")
+for song in playlist:
+    print(f"🎶 {song}")</div>
+        <div class="activity-box"><strong>🎯 Try This:</strong> Turn the two adds into a loop that asks 5 times!</div>
+    </div>
+
+    <!-- Slide 12: Functions intro -->
+    <div class="slide">
+        <h2>⚙️ Functions: Do It Once, Use It Forever</h2>
+        <p style="font-size:1.4em;">A function is a named, reusable block of instructions.</p>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">🎬 Like a recipe card — write it once, "cook" it whenever you need to!</p>
+        </div>
+    </div>
+
+    <!-- Slide 13: def -->
+    <div class="slide">
+        <h3>📝 Defining a Function</h3>
+        <div class="code-block">def greet():
+    print("Welcome to the game! 🎮")
+
+greet()   # calling it
+greet()   # calling it again!</div>
+        <div class="output">Welcome to the game! 🎮<br>Welcome to the game! 🎮</div>
+        <div class="fun-fact">🔑 def means "define." The function only runs when you CALL it with ()!</div>
+    </div>
+
+    <!-- Slide 14: parameters -->
+    <div class="slide">
+        <h3>📦 Parameters: Giving Functions Info</h3>
+        <div class="code-block">def greet(name):
+    print(f"Welcome, {name}! 🎮")
+
+greet("Amina")
+greet("Tunde")</div>
+        <div class="output">Welcome, Amina! 🎮<br>Welcome, Tunde! 🎮</div>
+        <div class="fun-fact">🎯 name is a parameter — a blank the function fills in differently each time it's called!</div>
+    </div>
+
+    <!-- Slide 15: return -->
+    <div class="slide">
+        <h3>↩️ return: Sending a Value Back</h3>
+        <div class="code-block">def add_goal(score):
+    return score + 1
+
+my_score = 0
+my_score = add_goal(my_score)
+my_score = add_goal(my_score)
+print(my_score)</div>
+        <div class="output">2</div>
+        <div class="fun-fact">📮 print() just SHOWS something. return HANDS a value back so you can use it later!</div>
+    </div>
+
+    <!-- Slide 16: Function quiz -->
+    <div class="slide">
+        <h3>🎮 Quiz: print() or return?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;" id="fn-question">I want a function that gives back a doubled number so I can store it in a variable</p>
+            <button onclick="answerFn('return')">return</button>
+            <button onclick="answerFn('print')">print</button>
+            <div id="fn-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Multiple parameters -->
+    <div class="slide">
+        <h3>📦📦 Multiple Parameters</h3>
+        <div class="code-block">def total_cost(price, quantity):
+    return price * quantity
+
+suya_bill = total_cost(500, 6)
+print(f"Total: ₦{suya_bill}")</div>
+        <div class="output">Total: ₦3000</div>
+        <div class="activity-box"><strong>🎯 Try This:</strong> Write a function is_high_score(score, record) that returns True if score beats record!</div>
+    </div>
+
+    <!-- Slide 18: High score tracker -->
+    <div class="slide">
+        <h3>🏆 Build: High Score Tracker</h3>
+        <div class="code-block">def check_high_score(score, high_score):
+    if score > high_score:
+        return score
+    return high_score
+
+high_score = 0
+new_score = int(input("Your score: "))
+high_score = check_high_score(new_score, high_score)
+print(f"High score is now {high_score}!")</div>
+        <div class="fun-fact">🔁 Call this function every round, and high_score always stays up to date!</div>
+    </div>
+
+    <!-- Slide 19: Combining lists and functions -->
+    <div class="slide">
+        <h2>🤝 Combining Lists + Functions</h2>
+        <div class="code-block">def print_roster(names):
+    for name in names:
+        print(f"✅ {name} is present")
+
+classroom = ["Ada", "Bola", "Chidi", "Dayo"]
+print_roster(classroom)</div>
+        <div class="output">✅ Ada is present<br>✅ Bola is present<br>✅ Chidi is present<br>✅ Dayo is present</div>
+        <div class="fun-fact">🎮 This is EXACTLY the pattern we'll use to move a whole squad of enemies later this week!</div>
+    </div>
+
+    <!-- Slide 20: Class register build -->
+    <div class="slide">
+        <h3>📋 Deliverable: Class Register</h3>
+        <div class="code-block">def print_roster(names):
+    for name in names:
+        print(f"✅ {name} is present")
+
+roster = []
+for i in range(4):
+    name = input("Student name: ")
+    roster.append(name)
+
+print_roster(roster)
+print(f"Total students: {len(roster)}")</div>
+        <div class="activity-box"><strong>🎯 Your mission:</strong> a program using BOTH a list AND a function — the exact combo real games use!</div>
+    </div>
+
+    <!-- Slide 21: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 3 Worksheet</h3>
+            <ul>
+                <li>Playlist Manager (loop + list)</li>
+                <li>High Score Tracker (function)</li>
+                <li>Class Register (list + function together)</li>
+                <li>⭐ Bonus: Shopping List with a remove_item function</li>
+            </ul>
+        </div>
+        <div class="fun-fact">📖 Note: we're skipping dictionaries this camp — lists + functions are all Museum Invaders needs!</div>
+    </div>
+
+    <!-- Slide 22: Tomorrow preview -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>🏛️ Meet Pygame!</h3>
+            <ul>
+                <li>Install pygame and open a real game window</li>
+                <li>Learn the "game loop"</li>
+                <li>Move a sprite with arrow keys</li>
+                <li>This is where Museum Invaders BEGINS!</li>
+            </ul>
+        </div>
+        <div class="emoji">🏛️ 🕹️ 👾 🔥</div>
+    </div>
+
+    <!-- Slide 23: Wrap up -->
+    <div class="slide">
+        <h1>🎉 Huge Day!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Creating and indexing lists</li>
+            <li>append(), remove(), len(), and looping</li>
+            <li>Defining functions with def and parameters</li>
+            <li>Using return to send values back</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Lists store "a bunch of things." Functions store "repeatable actions." You now have BOTH ingredients for a real game! 🐍✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow — game time! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! range(3) runs the loop body 3 times.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Remember: the indented line runs once PER loop cycle!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        const toppings = ["suya", "jollof", "puff puff", "chin chin"];
+        function showIndex(i) {
+            const result = document.getElementById('index-result');
+            const item = toppings[i < 0 ? toppings.length + i : i];
+            result.innerHTML = `toppings[${i}] → "${item}"`;
+            result.style.color = '#FFD700';
+        }
+
+        function answerFn(choice) {
+            const result = document.getElementById('fn-result');
+            if (choice === 'return') {
+                result.innerHTML = '✅ Correct! return hands the value back so you can store or reuse it.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ print() just displays it — you can\'t save what print() shows into a variable!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+    </script>
+</body>
+</html>

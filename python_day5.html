@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.1em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        canvas { background: #1a1a2e; border-radius: 10px; border: 3px solid #4A90E2; }
+        .file-tab {
+            display: inline-block; background: #2d3748; color: #FFD700; padding: 6px 16px;
+            border-radius: 8px 8px 0 0; font-family: monospace; font-size: 1em; border: 2px solid #4A90E2; border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">23</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 5: Classes, Sprites & Shooting</h2>
+        <div class="emoji">🧱 🔫 👾 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Welcome back! Time to organize AND arm our curator.</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Last Week?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">What THREE steps does every game loop repeat?</p>
+            <button onclick="warmup('a')">Save, load, quit</button>
+            <button onclick="warmup('b')">Input → update → draw</button>
+            <button onclick="warmup('c')">Print, input, return</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Adventure</h2>
+        <ul>
+            <li>What's a class/object? (brand new idea!)</li>
+            <li>Build a Player class</li>
+            <li>Split code across multiple files</li>
+            <li>Shooting: bullets as a list</li>
+            <li>Fire torch bolts with spacebar! 🔥</li>
+        </ul>
+    </div>
+
+    <!-- Slide 4: The problem -->
+    <div class="slide">
+        <h3>😅 Our Curator Is Getting Messy</h3>
+        <div class="code-block">x = 380
+y = 550
+speed = 5
+color = (255, 215, 0)
+width = 40
+height = 40
+# ...5 more variables just for ONE curator?!</div>
+        <p style="font-size:1.3em;">There's a better way to bundle all this together!</p>
+    </div>
+
+    <!-- Slide 5: What is a class -->
+    <div class="slide">
+        <h2>🧱 Classes: Blueprints for Objects</h2>
+        <p style="font-size:1.4em;">A <strong>class</strong> is a blueprint. An <strong>object</strong> is a real thing built from that blueprint.</p>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">🏠 The blueprint for a house isn't a house — it's the PLAN.</p>
+            <p style="font-size:1.3em;">Build from the plan, and you get a real house (an object)!</p>
+        </div>
+        <div class="fun-fact">🎮 In our game: Player is the blueprint. Your actual curator on screen is the object.</div>
+    </div>
+
+    <!-- Slide 6: Defining a class -->
+    <div class="slide">
+        <h3>📝 Defining Our First Class</h3>
+        <div class="code-block">class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.speed = 5</div>
+        <ul style="font-size:1.1em;">
+            <li><strong>__init__</strong> runs automatically when we create a Player</li>
+            <li><strong>self</strong> means "this specific player"</li>
+            <li>self.x stores x ON this player, forever</li>
+        </ul>
+    </div>
+
+    <!-- Slide 7: Creating an object -->
+    <div class="slide">
+        <h3>🏗️ Creating a Player Object</h3>
+        <div class="code-block">class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+curator = Player(380, 550)
+print(curator.x)
+print(curator.y)</div>
+        <div class="output">380<br>550</div>
+        <div class="fun-fact">✨ curator.x reads like English: "the curator's x." That's the power of self!</div>
+    </div>
+
+    <!-- Slide 8: Methods -->
+    <div class="slide">
+        <h3>⚙️ Methods: Functions That Live Inside a Class</h3>
+        <div class="code-block">class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move_left(self):
+        self.x -= 5
+
+    def move_right(self):
+        self.x += 5
+
+curator = Player(380, 550)
+curator.move_right()
+print(curator.x)</div>
+        <div class="output">385</div>
+        <div class="fun-fact">🎯 A method is just a function that belongs to the class — it can use and change self's own data!</div>
+    </div>
+
+    <!-- Slide 9: draw method -->
+    <div class="slide">
+        <h3>🎨 A draw() Method</h3>
+        <div class="code-block">class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen, (255, 215, 0),
+            (self.x, self.y, 40, 40)
+        )</div>
+        <div class="fun-fact">🖌️ Now drawing the curator is just curator.draw(screen) — the class hides all the messy details!</div>
+    </div>
+
+    <!-- Slide 10: Why classes matter -->
+    <div class="slide">
+        <h3>🧠 Why Bother With Classes?</h3>
+        <ul>
+            <li>All the curator's data lives in ONE tidy place</li>
+            <li>We can easily make MORE than one (great for enemies tomorrow!)</li>
+            <li>Code reads like English: curator.move_left()</li>
+        </ul>
+        <div class="fun-fact">👾 Tomorrow we'll create 8 Alien objects from ONE Alien class. Classes are what make that possible!</div>
+    </div>
+
+    <!-- Slide 11: Multiple files intro -->
+    <div class="slide">
+        <h2>🗂️ Splitting Code Into Files</h2>
+        <p style="font-size:1.4em;">One giant file gets messy fast. Real projects split code into files by job.</p>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">📄 player.py → everything about the Player</p>
+            <p style="font-size:1.3em;">📄 main.py → the game loop that USES Player</p>
+        </div>
+    </div>
+
+    <!-- Slide 12: player.py -->
+    <div class="slide">
+        <h3>📄 File 1: player.py</h3>
+        <div class="file-tab">player.py</div>
+        <div class="code-block">import pygame
+
+class Player:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.speed = 5
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen, (255, 215, 0),
+            (self.x, self.y, 40, 40)
+        )</div>
+    </div>
+
+    <!-- Slide 13: main.py + import -->
+    <div class="slide">
+        <h3>📄 File 2: main.py</h3>
+        <div class="file-tab">main.py</div>
+        <div class="code-block">import pygame
+from player import Player
+
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+curator = Player(380, 550)
+
+running = True
+while running:
+    ...
+    curator.draw(screen)
+    pygame.display.flip()</div>
+        <div class="fun-fact">🔌 from player import Player pulls our class from the other file. Same folder, one import line!</div>
+    </div>
+
+    <!-- Slide 14: Common import errors -->
+    <div class="slide">
+        <h3>🐛 Import Trouble?</h3>
+        <ul>
+            <li>Both files must be in the SAME folder</li>
+            <li>The filename is player.py → we write from player import Player</li>
+            <li>Capitalization matters! Player ≠ player</li>
+        </ul>
+        <div class="fun-fact">🕵️ "ModuleNotFoundError" almost always means a typo in the filename or import line.</div>
+    </div>
+
+    <!-- Slide 15: Bullets intro -->
+    <div class="slide">
+        <h2>🔫 Shooting: Bullets Are a List</h2>
+        <p style="font-size:1.4em;">A bullet is just a position that moves upward every frame.</p>
+        <div class="code-block">bullets = []   # start with none on screen</div>
+        <div class="fun-fact">🎯 We already know lists AND loops from Day 3 — shooting is just applying them to a new problem!</div>
+    </div>
+
+    <!-- Slide 16: Firing a bullet -->
+    <div class="slide">
+        <h3>🔥 Firing on Spacebar</h3>
+        <div class="code-block">if keys[pygame.K_SPACE]:
+    new_bullet = [curator.x + 18, curator.y]
+    bullets.append(new_bullet)</div>
+        <div class="fun-fact">➕ Every spacebar tap adds ONE more [x, y] pair to our bullets list!</div>
+    </div>
+
+    <!-- Slide 17: Moving bullets -->
+    <div class="slide">
+        <h3>⬆️ Moving Every Bullet</h3>
+        <div class="code-block">for bullet in bullets:
+    bullet[1] -= 8    # move up the screen
+
+for bullet in bullets:
+    pygame.draw.rect(
+        screen, (255, 255, 0),
+        (bullet[0], bullet[1], 4, 12)
+    )</div>
+        <div class="fun-fact">🔄 One loop moves ALL bullets. Another loop draws ALL bullets. Same pattern as the class register!</div>
+    </div>
+
+    <!-- Slide 18: Removing off-screen bullets -->
+    <div class="slide">
+        <h3>🗑️ Cleaning Up Off-Screen Bullets</h3>
+        <div class="code-block">bullets = [b for b in bullets if b[1] > 0]</div>
+        <p style="font-size:1.2em;">This keeps only the bullets still ABOVE the bottom of the screen.</p>
+        <div class="fun-fact">🧹 Without this, thousands of invisible bullets would pile up and slow the game down!</div>
+    </div>
+
+    <!-- Slide 19: Interactive shooting demo -->
+    <div class="slide">
+        <h3>🎮 Try It: Fire Some Torch Bolts!</h3>
+        <div class="interactive-area">
+            <p>Click the box, then press ← → to move and SPACE to shoot!</p>
+            <canvas id="shoot-canvas" width="500" height="300" tabindex="0"></canvas>
+            <p style="margin-top:10px;">Bullets fired: <span id="bullet-count">0</span></p>
+        </div>
+    </div>
+
+    <!-- Slide 20: Deliverable -->
+    <div class="slide">
+        <h2>🏆 Today's Deliverable</h2>
+        <div class="activity-box">
+            <h3>A Player Class That Moves & Shoots</h3>
+            <p>Your Player class lives in <strong>player.py</strong>, is used from <strong>main.py</strong>, and torch bolts fire on spacebar!</p>
+        </div>
+    </div>
+
+    <!-- Slide 21: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 5 Worksheet</h3>
+            <ul>
+                <li>Build the Player class in player.py</li>
+                <li>Import and use it from main.py</li>
+                <li>Add shooting with spacebar</li>
+                <li>⭐ Bonus: limit to 1 bullet on screen at a time (challenge!)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 22: Tomorrow preview -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>👾 Enemy Squads!</h3>
+            <ul>
+                <li>Build an Alien class in alien.py</li>
+                <li>Store a whole row of aliens in a list</li>
+                <li>Make them march sideways together</li>
+            </ul>
+        </div>
+        <div class="emoji">👾 👾 👾 🔥</div>
+    </div>
+
+    <!-- Slide 23: Wrap up -->
+    <div class="slide">
+        <h1>🎉 Curator: Armed & Organized!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Classes, objects, __init__ and self</li>
+            <li>Methods like move() and draw()</li>
+            <li>Splitting code across files with import</li>
+            <li>Bullets as a list that moves and shoots</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Your curator can now move AND fight. Tomorrow, it finally has something to fight! 🔫✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (document.activeElement && document.activeElement.id === 'shoot-canvas') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! Input → update → draw, forever.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Think back to the loop diagram from Day 4!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // Mini shooting demo
+        const canvas = document.getElementById('shoot-canvas');
+        const ctx = canvas.getContext('2d');
+        let px = 230;
+        const py = 250, pw = 40, ph = 30;
+        let bullets = [];
+        let fired = 0;
+
+        function draw() {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(px, py, pw, ph);
+            ctx.fillStyle = '#FFFF66';
+            bullets.forEach(b => ctx.fillRect(b.x, b.y, 4, 12));
+            ctx.fillStyle = '#98FB98';
+            ctx.font = '14px monospace';
+            ctx.fillText('🏛️ gallery — ← → move, SPACE shoot', 10, 20);
+            document.getElementById('bullet-count').textContent = fired;
+        }
+        function tick() {
+            bullets.forEach(b => b.y -= 6);
+            bullets = bullets.filter(b => b.y > -20);
+            draw();
+            requestAnimationFrame(tick);
+        }
+        draw();
+        requestAnimationFrame(tick);
+
+        canvas.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') { px = Math.max(0, px - 12); e.preventDefault(); }
+            else if (e.key === 'ArrowRight') { px = Math.min(canvas.width - pw, px + 12); e.preventDefault(); }
+            else if (e.key === ' ') {
+                bullets.push({x: px + pw/2 - 2, y: py});
+                fired++;
+                e.preventDefault();
+            }
+        });
+        canvas.addEventListener('click', function() { canvas.focus(); });
+    </script>
+</body>
+</html>

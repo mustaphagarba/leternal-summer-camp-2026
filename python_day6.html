@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 6</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.1em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🐍"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        canvas { background: #1a1a2e; border-radius: 10px; border: 3px solid #4A90E2; }
+        .file-tab {
+            display: inline-block; background: #2d3748; color: #FFD700; padding: 6px 16px;
+            border-radius: 8px 8px 0 0; font-family: monospace; font-size: 1em; border: 2px solid #4A90E2; border-bottom: none;
+        }
+        .alien-row span { font-size: 2em; margin: 0 4px; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">22</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 6: Enemy Squads! 👾</h2>
+        <div class="emoji">👾 👾 👾 👾</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Time to give the curator something to fight!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Yesterday?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">What line pulls the Player class from player.py into main.py?</p>
+            <button onclick="warmup('a')">import player.py</button>
+            <button onclick="warmup('b')">from player import Player</button>
+            <button onclick="warmup('c')">get player.Player</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Adventure</h2>
+        <ul>
+            <li>Build an Alien class (alien.py)</li>
+            <li>Store MANY aliens in one list</li>
+            <li>Loop to move and draw them all</li>
+            <li>March sideways, bounce, drop down</li>
+            <li>Deliverable: a whole marching row!</li>
+        </ul>
+        <div class="fun-fact">🎯 This is the exact same list-of-things pattern from the Class Register on Day 3 — just with aliens instead of names!</div>
+    </div>
+
+    <!-- Slide 4: One vs many -->
+    <div class="slide">
+        <h3>🤔 One Enemy vs. Many Enemies</h3>
+        <p style="font-size:1.3em;">We could make 8 separate variables...</p>
+        <div class="code-block">alien1 = Alien(50, 50)
+alien2 = Alien(100, 50)
+alien3 = Alien(150, 50)
+# ...5 more?? 😩</div>
+        <p style="font-size:1.3em;">...or store them ALL in one list!</p>
+    </div>
+
+    <!-- Slide 5: alien.py -->
+    <div class="slide">
+        <h3>📄 File: alien.py</h3>
+        <div class="file-tab">alien.py</div>
+        <div class="code-block">import pygame
+
+class Alien:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def draw(self, screen):
+        pygame.draw.rect(
+            screen, (200, 60, 200),
+            (self.x, self.y, 32, 32)
+        )</div>
+        <div class="fun-fact">🏛️ Sound familiar? It's almost identical to Player from yesterday — that's the point of classes!</div>
+    </div>
+
+    <!-- Slide 6: Building a list of aliens -->
+    <div class="slide">
+        <h3>👾 Creating a Whole Row</h3>
+        <div class="code-block">from alien import Alien
+
+aliens = []
+for i in range(8):
+    new_alien = Alien(50 + i * 80, 50)
+    aliens.append(new_alien)</div>
+        <div class="fun-fact">🔁 One loop builds 8 aliens, each 80 pixels further right than the last. No copy-pasting needed!</div>
+    </div>
+
+    <!-- Slide 7: Visualizing the row -->
+    <div class="slide">
+        <h3>👀 What That Loop Builds</h3>
+        <div class="alien-row">
+            <span>👾</span><span>👾</span><span>👾</span><span>👾</span><span>👾</span><span>👾</span><span>👾</span><span>👾</span>
+        </div>
+        <p style="font-size:1.3em; margin-top:20px;">8 separate Alien objects, all living inside ONE list called aliens.</p>
+    </div>
+
+    <!-- Slide 8: Drawing them all -->
+    <div class="slide">
+        <h3>🎨 Drawing Every Alien</h3>
+        <div class="code-block">for alien in aliens:
+    alien.draw(screen)</div>
+        <p style="font-size:1.3em;">TWO lines. Doesn't matter if there are 8 aliens or 800 — this still works!</p>
+        <div class="fun-fact">🎯 This "for each thing in my list, do something" pattern is the heart of today. You've used it since Day 3!</div>
+    </div>
+
+    <!-- Slide 9: Formation movement intro -->
+    <div class="slide">
+        <h2>🚶 Formation Movement</h2>
+        <p style="font-size:1.4em;">Classic arcade enemies move together as ONE group:</p>
+        <ul>
+            <li>March sideways, all together</li>
+            <li>Bounce off the screen edge</li>
+            <li>Drop down one row when they bounce</li>
+        </ul>
+    </div>
+
+    <!-- Slide 10: A shared direction -->
+    <div class="slide">
+        <h3>➡️⬅️ One Shared Direction</h3>
+        <div class="code-block">direction = 1   # 1 = moving right, -1 = moving left
+
+for alien in aliens:
+    alien.x += direction * 2</div>
+        <div class="fun-fact">🧠 We don't give each alien its OWN direction — we use ONE shared variable so they all move in sync!</div>
+    </div>
+
+    <!-- Slide 11: Bouncing -->
+    <div class="slide">
+        <h3>🏓 Bouncing Off the Edge</h3>
+        <div class="code-block">hit_edge = False
+for alien in aliens:
+    if alien.x <= 0 or alien.x >= 760:
+        hit_edge = True
+
+if hit_edge:
+    direction = direction * -1</div>
+        <div class="fun-fact">🔍 We check ALL aliens first — if even ONE hits an edge, the whole squad turns around!</div>
+    </div>
+
+    <!-- Slide 12: Dropping down -->
+    <div class="slide">
+        <h3>⬇️ Dropping Down a Row</h3>
+        <div class="code-block">if hit_edge:
+    direction = direction * -1
+    for alien in aliens:
+        alien.y += 20</div>
+        <div class="fun-fact">😱 This is the classic arcade "getting closer" panic moment — a nod to Space Invaders, the game that started it all!</div>
+    </div>
+
+    <!-- Slide 13: Full formation code -->
+    <div class="slide">
+        <h3>🏗️ Putting It Together</h3>
+        <div class="code-block">direction = 1
+
+while running:
+    ...
+    hit_edge = False
+    for alien in aliens:
+        alien.x += direction * 2
+        if alien.x <= 0 or alien.x >= 760:
+            hit_edge = True
+
+    if hit_edge:
+        direction *= -1
+        for alien in aliens:
+            alien.y += 20
+
+    for alien in aliens:
+        alien.draw(screen)</div>
+    </div>
+
+    <!-- Slide 14: Interactive squad demo -->
+    <div class="slide">
+        <h3>🎮 Watch the Squad March!</h3>
+        <div class="interactive-area">
+            <p>This mirrors what your Python code will do:</p>
+            <canvas id="squad-canvas" width="500" height="260"></canvas>
+            <button onclick="toggleMarch()" id="march-btn" style="margin-top:10px;">⏸️ Pause</button>
+        </div>
+    </div>
+
+    <!-- Slide 15: Three files now -->
+    <div class="slide">
+        <h3>🗂️ Our Project Now Has 3 Files</h3>
+        <ul>
+            <li><strong>main.py</strong> — the game loop, ties everything together</li>
+            <li><strong>player.py</strong> — the Player class</li>
+            <li><strong>alien.py</strong> — the Alien class</li>
+        </ul>
+        <div class="fun-fact">📦 This is EXACTLY the "2-3 files" structure real small games use. You're coding like a real developer now!</div>
+    </div>
+
+    <!-- Slide 16: Common bugs -->
+    <div class="slide">
+        <h3>🐛 Common Squad Bugs</h3>
+        <ul>
+            <li>Aliens overlap → check your spacing math (i * 80)</li>
+            <li>Squad doesn't turn around → hit_edge never gets checked properly</li>
+            <li>Only ONE alien moves → the += is outside the for loop!</li>
+        </ul>
+        <div class="fun-fact">🕵️ If something is "supposed to happen to everyone" but only happens once, check your indentation — is it really inside the loop?</div>
+    </div>
+
+    <!-- Slide 17: Deliverable -->
+    <div class="slide">
+        <h2>🏆 Today's Deliverable</h2>
+        <div class="activity-box">
+            <h3>A Marching Row of 8 Exhibits!</h3>
+            <p>Built in <strong>alien.py</strong>, stored in a list, moving together across THREE files: main.py, player.py, alien.py</p>
+        </div>
+    </div>
+
+    <!-- Slide 18: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 6 Worksheet</h3>
+            <ul>
+                <li>Build the Alien class</li>
+                <li>Create a list of 8 aliens with a loop</li>
+                <li>Add formation movement + bounce + drop</li>
+                <li>⭐ Bonus: give aliens two different colors, alternating</li>
+            </ul>
+        </div>
+        <div class="fun-fact">⚠️ Pacing note: today and tomorrow are the trickiest days of camp. Ask for help early — that's what we're here for!</div>
+    </div>
+
+    <!-- Slide 19: Tomorrow preview -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>💥 Collisions, Win & Lose!</h3>
+            <ul>
+                <li>Detect when a bullet HITS an alien</li>
+                <li>Remove destroyed aliens</li>
+                <li>Win when the row is empty, lose if they reach you</li>
+                <li>A full playable round of Museum Invaders!</li>
+            </ul>
+        </div>
+        <div class="emoji">💥 🏆 😱 🔥</div>
+    </div>
+
+    <!-- Slide 20: Roadmap check-in -->
+    <div class="slide">
+        <h3>🗺️ The Road to Museum Invaders</h3>
+        <ul style="font-size:1.15em;">
+            <li>✅ Day 4: Moving curator</li>
+            <li>✅ Day 5: Player class + shooting</li>
+            <li>✅ Day 6: Enemy squad marching</li>
+            <li>Day 7: Collisions + win/lose (final build day!)</li>
+            <li>Day 8: Polish + showcase</li>
+        </ul>
+    </div>
+
+    <!-- Slide 21: Show and tell -->
+    <div class="slide">
+        <h2>🎪 Show & Tell!</h2>
+        <p style="font-size:1.5em;">Whose squad marches the smoothest? Show us! 📽️</p>
+        <div class="fun-fact">👏 Getting a whole GROUP to move together in sync is a real milestone — celebrate it!</div>
+    </div>
+
+    <!-- Slide 22: Wrap up -->
+    <div class="slide">
+        <h1>🎉 The Gallery Has Invaders!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Building an Alien class in its own file</li>
+            <li>Storing many objects in one list</li>
+            <li>Looping to move and draw a whole group</li>
+            <li>Shared-direction formation movement</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Your game finally has a curator AND enemies. Tomorrow, they finally collide! 👾✨</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! from player import Player pulls the class in.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Close, but check the exact syntax — Python is picky about this!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // Mini marching squad demo
+        const canvas = document.getElementById('squad-canvas');
+        const ctx = canvas.getContext('2d');
+        let aliens = [];
+        for (let i = 0; i < 8; i++) aliens.push({x: 30 + i * 55, y: 40});
+        let direction = 1;
+        let marching = true;
+
+        function drawSquad() {
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#98FB98';
+            ctx.font = '14px monospace';
+            ctx.fillText('👾 marching squad', 10, 20);
+            ctx.fillStyle = '#C83CC8';
+            aliens.forEach(a => ctx.fillRect(a.x, a.y, 28, 28));
+        }
+        function tickSquad() {
+            if (marching) {
+                let hitEdge = false;
+                aliens.forEach(a => {
+                    a.x += direction * 2;
+                    if (a.x <= 0 || a.x >= canvas.width - 28) hitEdge = true;
+                });
+                if (hitEdge) {
+                    direction *= -1;
+                    aliens.forEach(a => a.y += 15);
+                    if (aliens[0].y > canvas.height - 60) aliens.forEach(a => a.y = 40);
+                }
+            }
+            drawSquad();
+            requestAnimationFrame(tickSquad);
+        }
+        drawSquad();
+        requestAnimationFrame(tickSquad);
+
+        function toggleMarch() {
+            marching = !marching;
+            document.getElementById('march-btn').textContent = marching ? '⏸️ Pause' : '▶️ Resume';
+        }
+    </script>
+</body>
+</html>
