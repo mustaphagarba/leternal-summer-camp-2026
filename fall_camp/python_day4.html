@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.1em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        button.small { padding: 8px 16px; font-size: 1em; }
+        input[type="range"] { width: 70%; margin: 8px 0; }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        .setup-steps {
+            background: rgba(0,0,0,0.25); border-radius: 15px; padding: 20px; margin: 20px 0;
+            text-align: left; font-size: 1.2em; line-height: 1.8;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🪐"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        canvas { background: #05050f; border-radius: 10px; border: 3px solid #4A90E2; max-width: 100%; }
+        .loop-step {
+            display: inline-block; background: #2d3748; color: #98FB98; padding: 12px 16px;
+            border-radius: 10px; margin: 6px; font-weight: bold; border: 2px solid #4A90E2;
+        }
+        .loop-arrow { font-size: 1.4em; color: #FFD700; }
+        .axis-row { font-size: 1.2em; line-height: 2; text-align: left; max-width: 520px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">23</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 4: Meet 3D Python! 🌞</h2>
+        <div class="emoji">🌞 🪐 🔭 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Today, Solar Voyager officially begins!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Yesterday?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">names = ["Mercury", "Venus", "Earth"]<br>What does <span style="font-family:monospace;color:#FFD700;">print(names[1])</span> show?</p>
+            <button onclick="warmup('a')">Mercury</button>
+            <button onclick="warmup('b')">Venus</button>
+            <button onclick="warmup('c')">Earth</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: The big reveal with teaser -->
+    <div class="slide">
+        <h1>🪐 Meet Solar Voyager!</h1>
+        <p style="font-size:1.3em;">By Day 7, YOU will have built a 3D solar system like this one:</p>
+        <div class="interactive-area">
+            <canvas id="teaser-canvas" width="560" height="300"></canvas>
+        </div>
+        <div class="fun-fact">🌌 (This is just a flat preview. Yours will be truly 3D — you can spin it and zoom right in!)</div>
+    </div>
+
+    <!-- Slide 4: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Mission</h2>
+        <ul>
+            <li>Install a 3D graphics library</li>
+            <li>Open your first 3D scene</li>
+            <li>Understand x, y, z coordinates</li>
+            <li>Make a glowing Sun ☀️</li>
+            <li>Learn the render loop</li>
+        </ul>
+    </div>
+
+    <!-- Slide 5: Install -->
+    <div class="slide">
+        <h3>🛠️ Installing VPython</h3>
+        <div class="setup-steps">
+            1️⃣ Open a terminal in VS Code (Terminal → New Terminal)<br>
+            2️⃣ Type: <strong>pip install vpython</strong> and press Enter<br>
+            3️⃣ Wait for "Successfully installed vpython"<br>
+            4️⃣ Raise your hand ✋ if you see any red error text
+        </div>
+        <div class="fun-fact">📦 pip is Python's "app store." VPython is a toolkit other people built so we can make 3D scenes with just a few lines!</div>
+    </div>
+
+    <!-- Slide 6: What is VPython -->
+    <div class="slide">
+        <h2>🌐 What Is VPython?</h2>
+        <p style="font-size:1.4em;">A toolkit that lets Python draw real 3D objects — spheres, boxes, rings — and animate them.</p>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">Without it, Python just prints text.</p>
+            <p style="font-size:1.3em;">With it, Python can build a whole solar system! 🪐</p>
+        </div>
+        <div class="fun-fact">🎓 VPython was made for teaching physics — scientists and students use it to simulate planets, springs, and more.</div>
+    </div>
+
+    <!-- Slide 7: First scene -->
+    <div class="slide">
+        <h3>🎉 Your First 3D Scene</h3>
+        <div class="code-block">from vpython import *
+
+sun = sphere()</div>
+        <p style="font-size:1.2em;">Save it as <strong>main.py</strong> and press Run ▶️ — a browser tab opens by itself with a white ball floating in 3D!</p>
+        <div class="fun-fact">🪟 That browser tab IS your 3D window. Python draws the scene, and your browser displays it.</div>
+    </div>
+
+    <!-- Slide 8: Sun Designer interactive -->
+    <div class="slide">
+        <h3>🎮 Activity: Sun Designer</h3>
+        <div class="interactive-area">
+            <p>Radius: <span id="rad-val">2</span></p>
+            <input type="range" id="rad-slider" min="1" max="4" step="0.5" value="2" oninput="updateSun()">
+            <br>
+            <button class="small" onclick="setSunColor('yellow','#FFD700')">yellow</button>
+            <button class="small" onclick="setSunColor('orange','#FF8C00')">orange</button>
+            <button class="small" onclick="setSunColor('red','#FF3B30')">red</button>
+            <button class="small" onclick="setSunColor('cyan','#00E5FF')">cyan</button>
+            <br>
+            <canvas id="sun-canvas" width="360" height="220"></canvas>
+            <div class="code-block" id="sun-code" style="font-size:1em;">sun = sphere(pos=vector(0, 0, 0), radius=2, color=color.yellow)</div>
+        </div>
+        <div class="fun-fact">🌞 Real stars come in different colors too — hotter stars look blue-white, cooler ones look orange-red!</div>
+    </div>
+
+    <!-- Slide 9: 3D coordinates -->
+    <div class="slide">
+        <h3>📐 3D Coordinates: x, y, z</h3>
+        <div class="code-block">sun = sphere(pos=vector(x, y, z))</div>
+        <div class="axis-row">
+            ➡️ <strong>x</strong> — left / right<br>
+            ⬆️ <strong>y</strong> — up / down<br>
+            👁️ <strong>z</strong> — toward you / away from you
+        </div>
+        <div class="fun-fact">📍 vector(0, 0, 0) is the center of the whole scene — the perfect spot for our Sun!</div>
+    </div>
+
+    <!-- Slide 10: Coordinates quiz -->
+    <div class="slide">
+        <h3>🎮 Quiz: Where Does It Go?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;" id="axis-question">A sphere is placed at vector(0, 3, 0). Which way does it move from the center?</p>
+            <button onclick="answerAxis('right')">Right ➡️</button>
+            <button onclick="answerAxis('up')">Up ⬆️</button>
+            <button onclick="answerAxis('toward')">Toward me 👁️</button>
+            <div id="axis-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Making it a Sun -->
+    <div class="slide">
+        <h3>☀️ Turning the Ball Into a Sun</h3>
+        <div class="code-block">from vpython import *
+
+scene.background = color.black
+
+sun = sphere(
+    pos=vector(0, 0, 0),
+    radius=2,
+    color=color.yellow,
+    emissive=True
+)</div>
+        <div class="fun-fact">💡 emissive=True makes the sphere glow on its own, like a real star. The black background turns the scene into outer space!</div>
+    </div>
+
+    <!-- Slide 12: Camera controls -->
+    <div class="slide">
+        <h3>🎥 Free Camera Controls!</h3>
+        <ul>
+            <li>Right-click + drag → rotate around the Sun</li>
+            <li>Scroll wheel → zoom in and out</li>
+            <li>Shift + drag → slide the view sideways</li>
+        </ul>
+        <div class="fun-fact">🧭 You wrote ZERO code for this — VPython gives you camera controls for free! (Laptop trackpads can behave differently, so try yours out.)</div>
+    </div>
+
+    <!-- Slide 13: Render loop concept -->
+    <div class="slide">
+        <h3>🔁 The Render Loop</h3>
+        <p style="font-size:1.3em;">To make things move, a 3D program repeats these steps, over and over:</p>
+        <div style="margin: 25px 0;">
+            <span class="loop-step">1. Change something 🔄</span>
+            <span class="loop-arrow">➜</span>
+            <span class="loop-step">2. Wait a moment ⏱️</span>
+            <span class="loop-arrow">➜</span>
+            <span class="loop-step">3. VPython redraws 🖌️</span>
+            <span class="loop-arrow">↩️ repeat!</span>
+        </div>
+        <div class="fun-fact">🎬 It's like a flipbook — each page is a tiny bit different, and flipping fast makes things MOVE!</div>
+    </div>
+
+    <!-- Slide 14: Loop in code -->
+    <div class="slide">
+        <h3>🌟 The Pulsing Sun</h3>
+        <div class="code-block">growing = True
+
+while True:
+    rate(60)          # wait: at most 60 frames per second
+
+    if growing:
+        sun.radius = sun.radius + 0.01
+    else:
+        sun.radius = sun.radius - 0.01
+
+    if sun.radius > 2.5:
+        growing = False
+    if sun.radius < 2:
+        growing = True</div>
+        <div class="fun-fact">🎯 Look closely — that's Day 2's while loop and if/else, now making a star breathe in and out!</div>
+    </div>
+
+    <!-- Slide 15: Live pulsing demo -->
+    <div class="slide">
+        <h3>👀 Watch It Pulse (Live Preview)</h3>
+        <div class="interactive-area">
+            <canvas id="pulse-canvas" width="360" height="240"></canvas>
+            <p style="font-size:1.1em; margin-top:8px;">Frames drawn: <span id="frame-count">0</span> &nbsp;|&nbsp; radius: <span id="pulse-radius">2.00</span></p>
+        </div>
+        <div class="fun-fact">🎞️ This flat preview does the same thing your Python code will do — the radius grows, shrinks, grows, shrinks…</div>
+    </div>
+
+    <!-- Slide 16: Why rate -->
+    <div class="slide">
+        <h3>⏱️ Why rate(60)?</h3>
+        <ul>
+            <li>It limits the loop to at most 60 frames per second</li>
+            <li>Without it, the loop races as fast as the computer can go</li>
+            <li>A racing loop can freeze the browser tab 🥶</li>
+        </ul>
+        <div class="fun-fact">🚨 Rule of the camp: every VPython while loop needs a rate() line as its FIRST line inside the loop!</div>
+    </div>
+
+    <!-- Slide 17: Full code -->
+    <div class="slide">
+        <h3>🏗️ Putting It All Together</h3>
+        <div class="code-block">from vpython import *
+
+scene.title = "Solar Voyager"
+scene.background = color.black
+
+sun = sphere(pos=vector(0, 0, 0), radius=2,
+             color=color.yellow, emissive=True)
+
+growing = True
+while True:
+    rate(60)
+    if growing:
+        sun.radius = sun.radius + 0.01
+    else:
+        sun.radius = sun.radius - 0.01
+    if sun.radius > 2.5:
+        growing = False
+    if sun.radius < 2:
+        growing = True</div>
+    </div>
+
+    <!-- Slide 18: Hiccups -->
+    <div class="slide">
+        <h3>🐛 Common VPython Hiccups</h3>
+        <ul style="font-size:1.15em;">
+            <li>"No module named vpython" → pip install didn't finish</li>
+            <li>Nothing happens → check for a new browser tab</li>
+            <li>Error on color → it's color.yellow, all lowercase!</li>
+            <li>Frozen tab → you forgot rate() inside the loop</li>
+            <li>Closing the tab doesn't stop Python → click the terminal and press Ctrl + C</li>
+        </ul>
+        <div class="fun-fact">🕵️ Read error messages bottom-to-top — the last line usually tells you exactly what's wrong!</div>
+    </div>
+
+    <!-- Slide 19: Deliverable -->
+    <div class="slide">
+        <h2>🏆 Week 1 Project: Light Up the Sun!</h2>
+        <div class="activity-box">
+            <h3>Your Deliverable</h3>
+            <p>A 3D scene with a glowing Sun, on a black space background, that you can rotate and zoom around — saved as <strong>main.py</strong></p>
+        </div>
+        <div class="fun-fact">🎉 This one glowing sphere is officially the FIRST piece of Solar Voyager. Everything else gets added around it!</div>
+    </div>
+
+    <!-- Slide 20: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 4 Worksheet</h3>
+            <ul>
+                <li>Install VPython and open your first scene</li>
+                <li>Design your own Sun</li>
+                <li>Explore x, y, z with a test planet</li>
+                <li>Make the Sun pulse with a loop</li>
+                <li>⭐ Bonus: speed control and color-changing Sun</li>
+            </ul>
+        </div>
+        <p style="font-size:1.2em;">Save often, and ask for help early! 🙋</p>
+    </div>
+
+    <!-- Slide 21: Showcase -->
+    <div class="slide">
+        <h2>🎪 End of Week 1 Showcase!</h2>
+        <p style="font-size:1.5em;">Everyone demo your Sun on the big screen! 📽️</p>
+        <div class="fun-fact">👏 On Monday you printed "hello." Today you built a star. That's huge progress!</div>
+    </div>
+
+    <!-- Slide 22: Roadmap + next week -->
+    <div class="slide">
+        <h3>🗺️ The Road to Solar Voyager</h3>
+        <ul style="font-size:1.15em;">
+            <li>✅ Day 3: Lists + Functions (the Planet Database)</li>
+            <li>✅ Day 4: A glowing Sun in a 3D scene</li>
+            <li>Day 5: Build a Planet class</li>
+            <li>Day 6: Place all 8 planets from a list</li>
+            <li>Day 7: Make everything ORBIT</li>
+            <li>Day 8: Polish + showcase!</li>
+        </ul>
+        <div class="fun-fact">🚀 Next week: classes, planets, and real orbital motion!</div>
+    </div>
+
+    <!-- Slide 23: Wrap up -->
+    <div class="slide">
+        <h1>🎉 You Built a Star!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Installing and importing VPython</li>
+            <li>Creating spheres with pos, radius, and color</li>
+            <li>3D coordinates: x, y, and z</li>
+            <li>The render loop and rate()</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Solar Voyager has officially begun. Everything from here builds on THIS code! 🌞🐍</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you next week! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'b') {
+                result.innerHTML = '✅ Correct! Index 1 is the SECOND item — Python counts from 0.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Remember: indexes start at 0, so index 1 is the second item!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // ---- Teaser: orbiting planets (flat preview) ----
+        const tc = document.getElementById('teaser-canvas');
+        const tctx = tc.getContext('2d');
+        const teaserPlanets = [
+            {d: 45,  r: 4,  c: '#B0B0B0', s: 0.045},
+            {d: 70,  r: 6,  c: '#E8B96A', s: 0.03},
+            {d: 100, r: 7,  c: '#4A90E2', s: 0.022},
+            {d: 130, r: 5,  c: '#E5533D', s: 0.017},
+            {d: 175, r: 12, c: '#D9A066', s: 0.010}
+        ];
+        let teaserAngle = 0;
+        function drawTeaser() {
+            tctx.fillStyle = '#05050f';
+            tctx.fillRect(0, 0, tc.width, tc.height);
+            const cx = tc.width / 2, cy = tc.height / 2;
+            tctx.strokeStyle = 'rgba(255,255,255,0.12)';
+            teaserPlanets.forEach(p => {
+                tctx.beginPath();
+                tctx.ellipse(cx, cy, p.d, p.d * 0.45, 0, 0, Math.PI * 2);
+                tctx.stroke();
+            });
+            const g = tctx.createRadialGradient(cx, cy, 2, cx, cy, 22);
+            g.addColorStop(0, '#FFF6A0'); g.addColorStop(1, '#FF9800');
+            tctx.fillStyle = g;
+            tctx.beginPath(); tctx.arc(cx, cy, 16, 0, Math.PI * 2); tctx.fill();
+            teaserPlanets.forEach((p, i) => {
+                const a = teaserAngle * p.s * 40 + i * 1.3;
+                const x = cx + Math.cos(a) * p.d;
+                const y = cy + Math.sin(a) * p.d * 0.45;
+                tctx.fillStyle = p.c;
+                tctx.beginPath(); tctx.arc(x, y, p.r, 0, Math.PI * 2); tctx.fill();
+            });
+            teaserAngle += 0.02;
+            requestAnimationFrame(drawTeaser);
+        }
+        drawTeaser();
+
+        // ---- Sun Designer ----
+        let sunRadius = 2, sunColorName = 'yellow', sunColorHex = '#FFD700';
+        const sc = document.getElementById('sun-canvas');
+        const sctx = sc.getContext('2d');
+        function drawSun() {
+            sctx.fillStyle = '#05050f';
+            sctx.fillRect(0, 0, sc.width, sc.height);
+            const r = sunRadius * 25;
+            const g = sctx.createRadialGradient(sc.width/2, sc.height/2, r * 0.2, sc.width/2, sc.height/2, r * 1.5);
+            g.addColorStop(0, sunColorHex);
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            sctx.fillStyle = g;
+            sctx.beginPath(); sctx.arc(sc.width/2, sc.height/2, r * 1.5, 0, Math.PI * 2); sctx.fill();
+            sctx.fillStyle = sunColorHex;
+            sctx.beginPath(); sctx.arc(sc.width/2, sc.height/2, r, 0, Math.PI * 2); sctx.fill();
+            document.getElementById('sun-code').textContent =
+                'sun = sphere(pos=vector(0, 0, 0), radius=' + sunRadius + ', color=color.' + sunColorName + ')';
+            document.getElementById('rad-val').textContent = sunRadius;
+        }
+        function updateSun() { sunRadius = parseFloat(document.getElementById('rad-slider').value); drawSun(); }
+        function setSunColor(name, hex) { sunColorName = name; sunColorHex = hex; drawSun(); }
+        drawSun();
+
+        // ---- Axis quiz ----
+        const axisQuestions = [
+            { q: 'A sphere is placed at vector(0, 3, 0). Which way does it move from the center?', a: 'up' },
+            { q: 'A sphere is placed at vector(5, 0, 0). Which way does it move from the center?', a: 'right' },
+            { q: 'A sphere is placed at vector(0, 0, 4). Which way does it move from the center?', a: 'toward' }
+        ];
+        let axisIndex = 0;
+        function answerAxis(choice) {
+            const result = document.getElementById('axis-result');
+            if (choice === axisQuestions[axisIndex].a) {
+                result.innerHTML = '✅ Correct!';
+                result.style.color = '#98FB98';
+                axisIndex = (axisIndex + 1) % axisQuestions.length;
+                setTimeout(() => {
+                    document.getElementById('axis-question').textContent = axisQuestions[axisIndex].q;
+                    result.innerHTML = '';
+                }, 1400);
+            } else {
+                result.innerHTML = '❌ Look at which position in vector(x, y, z) is non-zero: x = sideways, y = up, z = toward you.';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // ---- Live pulsing preview (mirrors the Python loop) ----
+        const pc = document.getElementById('pulse-canvas');
+        const pctx = pc.getContext('2d');
+        let pr = 2, pgrowing = true, frames = 0;
+        function drawPulse() {
+            pctx.fillStyle = '#05050f';
+            pctx.fillRect(0, 0, pc.width, pc.height);
+            const r = pr * 30;
+            const g = pctx.createRadialGradient(pc.width/2, pc.height/2, r * 0.2, pc.width/2, pc.height/2, r * 1.5);
+            g.addColorStop(0, '#FFD700'); g.addColorStop(1, 'rgba(0,0,0,0)');
+            pctx.fillStyle = g;
+            pctx.beginPath(); pctx.arc(pc.width/2, pc.height/2, r * 1.5, 0, Math.PI * 2); pctx.fill();
+            pctx.fillStyle = '#FFD700';
+            pctx.beginPath(); pctx.arc(pc.width/2, pc.height/2, r, 0, Math.PI * 2); pctx.fill();
+            pr += pgrowing ? 0.01 : -0.01;
+            if (pr > 2.5) pgrowing = false;
+            if (pr < 2) pgrowing = true;
+            frames++;
+            document.getElementById('frame-count').textContent = frames;
+            document.getElementById('pulse-radius').textContent = pr.toFixed(2);
+            requestAnimationFrame(drawPulse);
+        }
+        drawPulse();
+    </script>
+</body>
+</html>
