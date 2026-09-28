@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Summer Camp - Day 5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; display: flex; flex-direction: column; color: white;
+        }
+        .slide {
+            display: none; padding: 40px; max-width: 1000px; margin: 0 auto;
+            text-align: center; min-height: 80vh;
+            flex-direction: column; justify-content: center;
+        }
+        .slide.active { display: flex; }
+        h1 { font-size: 3em; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #FFD700; }
+        h2 { font-size: 2.5em; margin-bottom: 25px; color: #FFB6C1; }
+        h3 { font-size: 2em; margin-bottom: 20px; color: #98FB98; }
+        .code-block {
+            background: #2d3748; border-radius: 15px; padding: 20px; margin: 20px 0;
+            font-family: 'Courier New', monospace; font-size: 1.1em; text-align: left;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); border: 3px solid #4A90E2;
+            white-space: pre-wrap;
+        }
+        .output {
+            background: #1a202c; border-radius: 10px; padding: 15px; margin: 15px 0;
+            font-family: 'Courier New', monospace; color: #90CDF4; border-left: 5px solid #38B2AC;
+            text-align: left;
+        }
+        .interactive-area {
+            background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px;
+            margin: 20px 0; backdrop-filter: blur(10px);
+        }
+        button {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4); color: white; border: none;
+            padding: 15px 30px; font-size: 1.2em; border-radius: 25px; cursor: pointer;
+            margin: 10px; font-family: 'Comic Sans MS', cursive; transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        button.small { padding: 8px 16px; font-size: 1em; }
+        input[type="text"], input[type="number"] {
+            padding: 10px; font-size: 1.1em; border-radius: 10px; border: none; margin: 5px; width: 140px;
+        }
+        input[type="range"] { width: 60%; margin: 8px 0; }
+        .navigation {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 20px;
+        }
+        .nav-btn { background: rgba(255,255,255,0.2); padding: 10px 20px; font-size: 1em; }
+        .slide-counter {
+            position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.3);
+            padding: 10px 15px; border-radius: 20px; font-size: 1.1em;
+        }
+        .fun-fact {
+            background: linear-gradient(45deg, #FF9A9E, #FECFEF); color: #333;
+            padding: 15px; border-radius: 15px; margin: 15px 0; font-weight: bold;
+        }
+        .activity-box {
+            background: linear-gradient(45deg, #A8E6CF, #DCEDC1); color: #2d5a27;
+            padding: 20px; border-radius: 15px; margin: 20px 0; border: 3px dashed #4A90E2;
+        }
+        ul { text-align: left; font-size: 1.3em; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        li { margin: 10px 0; list-style: none; position: relative; padding-left: 30px; }
+        li::before { content: "🪐"; position: absolute; left: 0; }
+        .emoji { font-size: 2em; margin: 0 10px; }
+        canvas { background: #05050f; border-radius: 10px; border: 3px solid #4A90E2; max-width: 100%; }
+        .file-tab {
+            display: inline-block; background: #2d3748; color: #FFD700; padding: 6px 16px;
+            border-radius: 8px 8px 0 0; font-family: monospace; font-size: 1em; border: 2px solid #4A90E2; border-bottom: none;
+        }
+        .blueprint {
+            display: inline-block; background: rgba(0,0,0,0.3); border: 3px dashed #FFD700;
+            border-radius: 12px; padding: 14px 20px; margin: 8px; font-size: 1.1em;
+        }
+        .built-card {
+            display: inline-block; background: rgba(255,255,255,0.15); border: 3px solid #98FB98;
+            border-radius: 12px; padding: 14px 20px; margin: 8px; font-size: 1.05em; text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides">23</span></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide active">
+        <h1>🐍 Python Summer Camp 🏕️</h1>
+        <h2>Day 5: The Planet Class 🪐</h2>
+        <div class="emoji">🧱 🪐 🌍 🚀</div>
+        <p style="font-size: 1.5em; margin-top: 30px;">Welcome to Week 2 — time to build planets!</p>
+    </div>
+
+    <!-- Slide 2: Warm-up -->
+    <div class="slide">
+        <h3>🔥 Warm-Up: Remember Last Week?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;">Which setting makes our Sun glow on its own, like a real star?</p>
+            <button onclick="warmup('a')">emissive=True</button>
+            <button onclick="warmup('b')">rate(60)</button>
+            <button onclick="warmup('c')">color.black</button>
+            <div id="warmup-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Agenda -->
+    <div class="slide">
+        <h2>🗺️ Today's Mission</h2>
+        <ul>
+            <li>What's a class? What's an object? (brand new!)</li>
+            <li>Build a Planet class</li>
+            <li>Split our code into two files</li>
+            <li>Place Earth and Mars around the Sun 🌍</li>
+        </ul>
+        <div class="fun-fact">🧱 Today is the biggest new idea of camp so far. It's okay if it feels strange at first. It clicks with practice!</div>
+    </div>
+
+    <!-- Slide 4: The problem -->
+    <div class="slide">
+        <h3>😅 A Planet Has Lots of Facts</h3>
+        <div class="code-block">earth_name = "Earth"
+earth_distance = 10
+earth_radius = 0.5
+earth_color = color.blue
+
+mars_name = "Mars"
+mars_distance = 13
+mars_radius = 0.4
+mars_color = color.red
+# ...and 6 more planets?! 😩</div>
+        <p style="font-size:1.3em;">Every planet needs the SAME set of facts. There must be a tidier way!</p>
+    </div>
+
+    <!-- Slide 5: Class vs object -->
+    <div class="slide">
+        <h2>🧱 Classes: Blueprints for Objects</h2>
+        <p style="font-size:1.4em;">A <strong>class</strong> is a blueprint. An <strong>object</strong> is a real thing built from that blueprint.</p>
+        <div>
+            <span class="blueprint">📐 Blueprint: <strong>Planet</strong><br>(name, distance, radius, color)</span>
+        </div>
+        <div style="font-size:1.6em;">⬇️ build one ⬇️</div>
+        <div>
+            <span class="built-card">🌍 earth</span>
+            <span class="built-card">🔴 mars</span>
+            <span class="built-card">🟠 venus</span>
+        </div>
+        <div class="fun-fact">🏠 The plan for a house isn't a house. Build from the plan, and you get a real one!</div>
+    </div>
+
+    <!-- Slide 6: Defining a class -->
+    <div class="slide">
+        <h3>📝 Defining the Planet Class</h3>
+        <div class="code-block">class Planet:
+    def __init__(self, name, distance):
+        self.name = name
+        self.distance = distance</div>
+        <ul style="font-size:1.1em;">
+            <li><strong>class Planet:</strong> starts the blueprint (capital P!)</li>
+            <li><strong>__init__</strong> runs automatically when a planet is built</li>
+            <li><strong>self</strong> means "this particular planet"</li>
+        </ul>
+    </div>
+
+    <!-- Slide 7: Creating objects -->
+    <div class="slide">
+        <h3>🏗️ Building Planet Objects</h3>
+        <div class="code-block">earth = Planet("Earth", 10)
+mars = Planet("Mars", 13)
+
+print(earth.name)
+print(mars.distance)</div>
+        <div class="output">Earth<br>13</div>
+        <div class="fun-fact">✨ earth.name reads like English: "earth's name." Each object keeps its OWN facts.</div>
+    </div>
+
+    <!-- Slide 8: Planet Factory interactive -->
+    <div class="slide">
+        <h3>🎮 Activity: The Planet Factory</h3>
+        <div class="interactive-area">
+            <input type="text" id="pf-name" placeholder="name" value="Earth">
+            <input type="number" id="pf-dist" placeholder="distance" value="10" min="4" max="40">
+            <input type="number" id="pf-rad" placeholder="radius" value="0.5" step="0.1" min="0.2" max="1.5">
+            <br>
+            <button class="small" onclick="pfColor('blue','#4A90E2')">blue</button>
+            <button class="small" onclick="pfColor('red','#E5533D')">red</button>
+            <button class="small" onclick="pfColor('orange','#FF9800')">orange</button>
+            <button class="small" onclick="pfColor('green','#66BB6A')">green</button>
+            <br>
+            <button onclick="buildPlanet()">🏭 Build the Planet!</button>
+            <br>
+            <canvas id="pf-canvas" width="560" height="120"></canvas>
+            <div class="code-block" id="pf-code" style="font-size:1em;">earth = Planet("Earth", 10, 0.5, color.blue)</div>
+        </div>
+        <div class="fun-fact">🌞 The yellow circle is the Sun. Your planet sits along the x-axis, just like vector(distance, 0, 0)!</div>
+    </div>
+
+    <!-- Slide 9: Methods -->
+    <div class="slide">
+        <h3>⚙️ Methods: Functions Inside a Class</h3>
+        <div class="code-block">class Planet:
+    def __init__(self, name, distance):
+        self.name = name
+        self.distance = distance
+
+    def describe(self):
+        print(f"{self.name} orbits {self.distance} units from the Sun")
+
+earth = Planet("Earth", 10)
+earth.describe()</div>
+        <div class="output">Earth orbits 10 units from the Sun</div>
+        <div class="fun-fact">🎯 A method is just a function (Day 3!) that belongs to the class and can read the object's own facts through self.</div>
+    </div>
+
+    <!-- Slide 10: Class vs object quiz -->
+    <div class="slide">
+        <h3>🎮 Quiz: Class or Object?</h3>
+        <div class="interactive-area">
+            <p style="font-size:1.3em;" id="co-question">In <span style="font-family:monospace;color:#FFD700;">mars = Planet("Mars", 13)</span>, which one is the OBJECT?</p>
+            <button onclick="answerCO('Planet')">Planet</button>
+            <button onclick="answerCO('mars')">mars</button>
+            <button onclick="answerCO('13')">13</button>
+            <div id="co-result" style="margin-top: 20px; font-size: 1.3em; font-weight: bold;"></div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Adding vpython -->
+    <div class="slide">
+        <h3>🌐 Bringing the Planet Into 3D</h3>
+        <p style="font-size:1.3em;">Now the blueprint also builds a glowing... well, a <strong>3D sphere</strong> for each planet:</p>
+        <div class="code-block">self.body = sphere(
+    pos=vector(distance, 0, 0),
+    radius=radius,
+    color=planet_color
+)</div>
+        <div class="fun-fact">📍 pos=vector(distance, 0, 0) puts the planet out along the x-axis, that many units from the Sun at the center. We save the sphere as self.body so the planet remembers it!</div>
+    </div>
+
+    <!-- Slide 12: planet.py -->
+    <div class="slide">
+        <h3>📄 File 1: planet.py</h3>
+        <div class="file-tab">planet.py</div>
+        <div class="code-block">from vpython import *
+
+class Planet:
+    def __init__(self, name, distance, radius, planet_color):
+        self.name = name
+        self.distance = distance
+        self.radius = radius
+        self.body = sphere(pos=vector(distance, 0, 0),
+                           radius=radius,
+                           color=planet_color)
+
+    def describe(self):
+        print(f"{self.name} orbits {self.distance} units from the Sun")</div>
+    </div>
+
+    <!-- Slide 13: main.py -->
+    <div class="slide">
+        <h3>📄 File 2: main.py</h3>
+        <div class="file-tab">main.py</div>
+        <div class="code-block">from vpython import *
+from planet import Planet
+
+scene.background = color.black
+
+sun = sphere(pos=vector(0, 0, 0), radius=2,
+             color=color.yellow, emissive=True)
+
+earth = Planet("Earth", 10, 0.5, color.blue)
+mars = Planet("Mars", 13, 0.4, color.red)
+
+while True:
+    rate(60)</div>
+        <div class="fun-fact">🔌 from planet import Planet pulls the class in from planet.py. Both files must live in the SAME folder!</div>
+    </div>
+
+    <!-- Slide 14: Name gotcha -->
+    <div class="slide">
+        <h3>⚠️ Why "planet_color" and Not "color"?</h3>
+        <p style="font-size:1.2em;">VPython already uses the word <strong>color</strong> (as in color.blue). If our parameter is also called color, the two get tangled up inside the class!</p>
+        <div class="code-block">def __init__(self, name, distance, radius, planet_color):
+    ...
+    color=planet_color    # left side: VPython's setting
+                          # right side: OUR parameter</div>
+        <div class="fun-fact">🕵️ Picking names that don't clash with other tools is a real programmer skill. When in doubt, add a descriptive prefix!</div>
+    </div>
+
+    <!-- Slide 15: Import trouble -->
+    <div class="slide">
+        <h3>🐛 Import Trouble?</h3>
+        <ul>
+            <li>Both files must be in the SAME folder</li>
+            <li>The file is planet.py (lowercase), the class is Planet (capital P)</li>
+            <li>Run main.py, not planet.py!</li>
+            <li>"ModuleNotFoundError" usually means a typo in the filename or import line</li>
+        </ul>
+    </div>
+
+    <!-- Slide 16: Mars is one line -->
+    <div class="slide">
+        <h3>🔴 Adding Mars: Just One Line!</h3>
+        <div class="code-block">earth = Planet("Earth", 10, 0.5, color.blue)
+mars  = Planet("Mars", 13, 0.4, color.red)     # ← new!</div>
+        <div class="interactive-area">
+            <canvas id="duo-canvas" width="560" height="110"></canvas>
+        </div>
+        <div class="fun-fact">🚀 With the blueprint ready, every new planet costs ONE line. Tomorrow we'll build all 8 with a loop!</div>
+    </div>
+
+    <!-- Slide 17: Not to scale -->
+    <div class="slide">
+        <h3>📏 Heads Up: Not to Scale!</h3>
+        <ul style="font-size:1.15em;">
+            <li>Real distances: Earth is 150 million km from the Sun, Neptune is about 4,500 million km</li>
+            <li>To fit on your screen, we squash the distances (Earth = 10, Mars = 13)</li>
+            <li>Drawn truly to scale, the planets would be invisible specks!</li>
+        </ul>
+        <div class="fun-fact">🌌 Real astronomers make "not to scale" diagrams too. Space is mostly empty, and honest models tell you what they changed!</div>
+    </div>
+
+    <!-- Slide 18: Why classes matter -->
+    <div class="slide">
+        <h3>🧠 Why Bother With Classes?</h3>
+        <ul>
+            <li>All of a planet's facts live in ONE tidy object</li>
+            <li>New planets are one line each</li>
+            <li>Next week we'll add an orbit() method, and every planet will know how to orbit itself!</li>
+        </ul>
+    </div>
+
+    <!-- Slide 19: Common bugs -->
+    <div class="slide">
+        <h3>🐛 Common Class Bugs</h3>
+        <ul style="font-size:1.15em;">
+            <li>Forgot <strong>self.</strong> in front of a name inside the class</li>
+            <li>Wrote _init_ instead of __init__ (two underscores each side!)</li>
+            <li>"missing required positional argument" → you gave the planet too few facts</li>
+            <li>A planet hiding inside the Sun → its distance is too small</li>
+        </ul>
+        <div class="fun-fact">🕵️ Read the LAST line of the error message first. It usually names the exact problem!</div>
+    </div>
+
+    <!-- Slide 20: Deliverable -->
+    <div class="slide">
+        <h2>🏆 Today's Deliverable</h2>
+        <div class="activity-box">
+            <h3>A Planet Class in Its Own File!</h3>
+            <p>Your <strong>Planet</strong> class lives in <strong>planet.py</strong>, is used from <strong>main.py</strong>, and places at least two planets around the Sun</p>
+        </div>
+    </div>
+
+    <!-- Slide 21: Exercise time -->
+    <div class="slide">
+        <h2>💪 Exercise Time!</h2>
+        <div class="activity-box">
+            <h3>📋 Grab your Day 5 Worksheet</h3>
+            <ul>
+                <li>Build the Planet class in planet.py</li>
+                <li>Use it from main.py with Earth and Mars</li>
+                <li>Add a describe() method</li>
+                <li>Add Venus as a third planet</li>
+                <li>⭐ Bonus: year length, closer_than(), and Jupiter</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 22: Tomorrow -->
+    <div class="slide">
+        <h2>🚀 Tomorrow's Mission</h2>
+        <div class="activity-box">
+            <h3>🌌 The Whole Solar System!</h3>
+            <ul>
+                <li>Store all 8 planets' facts in lists (remember Day 3?)</li>
+                <li>Use ONE loop to build every planet</li>
+                <li>See the complete solar system appear</li>
+            </ul>
+        </div>
+        <div class="emoji">📋 🔁 🪐 🔥</div>
+    </div>
+
+    <!-- Slide 23: Wrap up -->
+    <div class="slide">
+        <h1>🎉 You Built a Blueprint!</h1>
+        <h2>Today You Learned:</h2>
+        <ul style="font-size: 1.3em;">
+            <li>Classes are blueprints, objects are the real things</li>
+            <li>__init__, self, and methods</li>
+            <li>Splitting code across files with import</li>
+            <li>Building planets in 3D from a class</li>
+        </ul>
+        <div class="fun-fact" style="margin-top: 30px;">🌟 Your Sun now has company. Tomorrow, the rest of the solar system arrives! 🌍🐍</div>
+        <p style="font-size: 1.4em; margin-top: 20px;">See you tomorrow! 🚀</p>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function previousSlide() { showSlide(currentSlide - 1); }
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT') return;
+            if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+            else if (e.key === 'ArrowLeft') previousSlide();
+        });
+
+        function warmup(choice) {
+            const result = document.getElementById('warmup-result');
+            if (choice === 'a') {
+                result.innerHTML = '✅ Correct! emissive=True makes the sphere glow like a star.';
+                result.style.color = '#98FB98';
+            } else {
+                result.innerHTML = '❌ Not quite. Think about which setting was on the sun = sphere(...) line!';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // ---- Planet Factory ----
+        let pfColorName = 'blue', pfColorHex = '#4A90E2';
+        function pfColor(name, hex) { pfColorName = name; pfColorHex = hex; buildPlanet(); }
+        function buildPlanet() {
+            const nameRaw = document.getElementById('pf-name').value.trim() || 'Planet';
+            let dist = parseFloat(document.getElementById('pf-dist').value);
+            let rad = parseFloat(document.getElementById('pf-rad').value);
+            if (isNaN(dist)) dist = 10;
+            if (isNaN(rad)) rad = 0.5;
+            dist = Math.max(4, Math.min(40, dist));
+            rad = Math.max(0.2, Math.min(1.5, rad));
+            const c = document.getElementById('pf-canvas');
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#05050f';
+            ctx.fillRect(0, 0, c.width, c.height);
+            const cy = c.height / 2;
+            const sunX = 40;
+            const unit = (c.width - sunX - 30) / 40;
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath(); ctx.arc(sunX, cy, 2 * unit * 0.9, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath(); ctx.moveTo(sunX, cy); ctx.lineTo(c.width - 10, cy); ctx.stroke();
+            const px = sunX + dist * unit;
+            ctx.fillStyle = pfColorHex;
+            ctx.beginPath(); ctx.arc(px, cy, Math.max(3, rad * unit * 1.2), 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#98FB98';
+            ctx.font = '14px sans-serif';
+            ctx.fillText(nameRaw, Math.min(px - 10, c.width - 80), cy - 22);
+            const varName = nameRaw.toLowerCase().replace(/[^a-z0-9]+/g, '_') || 'planet';
+            document.getElementById('pf-code').textContent =
+                varName + ' = Planet("' + nameRaw + '", ' + dist + ', ' + rad + ', color.' + pfColorName + ')';
+        }
+        buildPlanet();
+
+        // ---- Class vs object quiz ----
+        const coQuestions = [
+            { html: 'In <span style="font-family:monospace;color:#FFD700;">mars = Planet("Mars", 13)</span>, which one is the OBJECT?', a: 'mars' },
+            { html: 'In <span style="font-family:monospace;color:#FFD700;">mars = Planet("Mars", 13)</span>, which one is the CLASS (blueprint)?', a: 'Planet' }
+        ];
+        let coIndex = 0;
+        function answerCO(choice) {
+            const result = document.getElementById('co-result');
+            if (choice === coQuestions[coIndex].a) {
+                result.innerHTML = '✅ Correct!';
+                result.style.color = '#98FB98';
+                coIndex = (coIndex + 1) % coQuestions.length;
+                setTimeout(() => {
+                    document.getElementById('co-question').innerHTML = coQuestions[coIndex].html;
+                    result.innerHTML = '';
+                }, 1400);
+            } else {
+                result.innerHTML = '❌ Remember: the class is the blueprint (capital P). The object is the real planet built from it.';
+                result.style.color = '#FF6B6B';
+            }
+        }
+
+        // ---- Earth + Mars preview ----
+        (function() {
+            const c = document.getElementById('duo-canvas');
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#05050f';
+            ctx.fillRect(0, 0, c.width, c.height);
+            const cy = c.height / 2, sunX = 40, unit = 30;
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath(); ctx.arc(sunX, cy, 2 * unit * 0.9, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath(); ctx.moveTo(sunX, cy); ctx.lineTo(c.width - 10, cy); ctx.stroke();
+            [['Earth', 10, 0.5, '#4A90E2'], ['Mars', 13, 0.4, '#E5533D']].forEach(p => {
+                const x = sunX + p[1] * unit * 0.85;
+                ctx.fillStyle = p[3];
+                ctx.beginPath(); ctx.arc(x, cy, p[2] * unit * 0.9, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#98FB98'; ctx.font = '13px sans-serif';
+                ctx.fillText(p[0], x - 16, cy - 22);
+            });
+        })();
+    </script>
+</body>
+</html>
